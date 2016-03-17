@@ -43,7 +43,7 @@ static int cmd_si(char *args) {
 	if(ins==NULL){
 		cpu_exec(1);
 		return 0;
-	}else if('0'< *ins){
+	}else if((*ins-'0')>0){
 		int tnum=*ins-'0';
 		cpu_exec(tnum);
 		return 0;
