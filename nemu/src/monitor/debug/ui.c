@@ -40,6 +40,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args) {
 	char *ins=strtok(args," ");	
 	ins=strtok(NULL," ");
+
 	if(ins==NULL){
 		cpu_exec(1);
 		return 0;
