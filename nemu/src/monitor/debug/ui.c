@@ -55,7 +55,7 @@ static int cmd_si(char *args) {
 		for(i=0;i<slen;i++){
 			tnum=(ins[i]-'0')+tnum*10; 
 		}
-		cpu_exec(15);
+		cpu_exec(10);
 	}
 	return 0;	
 }
