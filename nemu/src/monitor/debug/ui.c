@@ -46,6 +46,7 @@ static int cmd_si(char *args) {
 		for(;i<slen;i++){
 			if(args[i]-'0'<0||args[i]-'9'>0){
 				printf("unvalid args");
+				return 0;
 			}
 		}
 		int tnum=0;
