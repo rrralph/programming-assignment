@@ -72,6 +72,7 @@ static int cmd_info(char *args) {
 		printf("ESI: %x\n",cpu.esi);
 		printf("EDI: %x\n",cpu.edi);
 	}else if(*des=='w'){
+		printf("watch \n");
 	}else printf("Invalid args!\n");
 	return 0;
 }
