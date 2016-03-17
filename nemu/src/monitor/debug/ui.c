@@ -47,14 +47,14 @@ static int cmd_si(char *args) {
 	}else{
 		int i=0,slen=sizeof(*ins)-1;
 		for(;i<slen;i++){
-			if(*(ins+i)-'0'<0){
+			if(ins[i]-'0'<0){
 				printf("unvalid args");
 				return -1;
 			}
 		}
 		int tnum=0;
 		for(i=0;i<slen;i++){
-			tnum=(*(ins+i)-'0')+tnum*10; 
+			tnum=(ins[i]-'0')+tnum*10; 
 		}
 		cpu_exec(tnum);
 	}
