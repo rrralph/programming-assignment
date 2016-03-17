@@ -40,9 +40,7 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 static int cmd_si(char *args) {
-	char *ins1=strtok(args," ");	
-	printf("%sins1:",ins1);
-	char *ins=strtok(NULL," ");
+	char *ins=strtok(args," ");	
 	if(ins==NULL){
 		printf("null2333");
 		cpu_exec(1);
