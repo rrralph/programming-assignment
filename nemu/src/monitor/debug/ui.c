@@ -47,8 +47,7 @@ static int cmd_si(char *args) {
 		int i=0,slen=strlen(args);
 		for(;i<slen;i++){
 			if(args[i]-'0'<0||args[i]-'9'>0){
-				printf("Unvalid args!\n");
-				return 0;
+				printf("Invalid args!\n");
 			}
 		}
 		int tnum=0;
@@ -72,7 +71,8 @@ static int cmd_info(char *args) {
 		printf("EBP: %d\n",cpu.ebp);
 		printf("ESI: %d\n",cpu.esi);
 		printf("EDI: %d\n",cpu.edi);
-	}
+	}else if(*des=='w'){
+	}else printf("Invalid args!\n");
 	return 0;
 }
 static struct {
