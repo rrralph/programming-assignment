@@ -41,7 +41,7 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 static int cmd_si(char *args) {
 	char *ins1=strtok(args," ");	
-	printf("%s",ins1);
+	printf("%sins1:",ins1);
 	char *ins=strtok(NULL," ");
 	if(ins==NULL){
 		printf("null2333");
