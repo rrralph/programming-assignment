@@ -40,6 +40,7 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 static int cmd_si(char *args) {
 	args=strtok(args," ");
+	//when more than 1 args are give, ensure to only use the first one
 	if(args==NULL){
 		cpu_exec(1);
 	}else{
@@ -51,6 +52,7 @@ static int cmd_si(char *args) {
 			}
 		}
 		int tnum=0;
+		//numeric value of the char type args
 		for(i=0;i<slen;i++){
 			tnum=(args[i]-'0')+tnum*10; 
 		}
@@ -58,6 +60,20 @@ static int cmd_si(char *args) {
 
 	}
 	return 0;	
+}
+static int cmd_info(char *args) {
+	char *des=strtok(args," ");
+	if(*des=='r'){
+		printf("EAX: %d\n",cpu.eax);
+		printf("ECX: %d\n",cpu.ecx);
+		printf("EDX: %d\n",cpu.edx);
+		printf("EBX: %d\n",cpu.ebx);
+		printf("ESP: %d\n",cpu.esp);
+		printf("EBP: %d\n",cpu.ebp);
+		printf("ESI: %d\n",cpu.esi);
+		printf("EDI: %d\n",cpu.edi);
+	}
+	return 0;
 }
 static struct {
 	char *name;
@@ -67,7 +83,8 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-        { "si","Execute N instructions then halt",cmd_si },
+        { "si", "Execute N instructions then halt", cmd_si },
+	{ "info", "Info r means print the registers, Info w means print watchpoints", cmd_info }
 	/* TODO: Add more commands */
 
 };
