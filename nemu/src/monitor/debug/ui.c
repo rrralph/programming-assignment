@@ -3,7 +3,6 @@
 #include "monitor/watchpoint.h"
 #include "nemu.h"
 
-#include <string.h>
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -40,20 +39,18 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 static int cmd_si(char *args) {
-	char *ins=args;	
-	if(ins==NULL){
+	if(args==NULL){
 		cpu_exec(1);
 	}else{
-		int i=0,slen=strlen(ins);
+		int i=0,slen=strlen(args);
 		for(;i<slen;i++){
-			if(ins[i]-'0'<0||ins[i]-'9'>0){
+			if(args[i]-'0'<0||args[i]-'9'>0){
 				printf("unvalid args");
-				return -1;
 			}
 		}
 		int tnum=0;
 		for(i=0;i<slen;i++){
-			tnum=(ins[i]-'0')+tnum*10; 
+			tnum=(args[i]-'0')+tnum*10; 
 		}
 		cpu_exec(tnum);
 
