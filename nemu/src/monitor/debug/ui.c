@@ -41,7 +41,7 @@ static int cmd_si(char *args) {
 	char *ins=strtok(args," ");	
 	ins=strtok(NULL," ");
 	if(ins==NULL){
-		cpu_exec(1);
+		cpu_exec(5);
 		return 0;
 	}else if((*ins-'0')>0){
 		int tnum=*ins-'0';
