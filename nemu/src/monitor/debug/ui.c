@@ -40,9 +40,11 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 static int cmd_si(char *args) {
-	char *ins=strtok(args," ");	
-	ins=strtok(NULL," ");
+	char *ins1=strtok(args," ");	
+	printf("%s",ins1);
+	char *ins=strtok(NULL," ");
 	if(ins==NULL){
+		printf("null2333");
 		cpu_exec(1);
 	}else{
 		int i=0,slen=sizeof(*ins);
