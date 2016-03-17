@@ -47,7 +47,7 @@ static int cmd_si(char *args) {
 	}else{
 		int i=0,slen=sizeof(*ins);
 		for(;i<slen;i++){
-			if(ins[i]-'0'<0){
+			if(ins[i]-'0'<0||ins[i]-'9'>0){
 				printf("unvalid args");
 				return -1;
 			}
