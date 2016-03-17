@@ -43,7 +43,6 @@ static int cmd_si(char *args) {
 	char *ins=strtok(args," ");	
 	printf("%s",ins);
 	if(ins==NULL){
-		printf("null2333");
 		cpu_exec(1);
 	}else{
 		int i=0,slen=sizeof(*ins);
@@ -54,7 +53,7 @@ static int cmd_si(char *args) {
 			}
 		}
 		int tnum=0;
-		for(i=0;i<slen;i++){
+		for(i=0;i<=slen;i++){
 			tnum=(ins[i]-'0')+tnum*10; 
 		}
 		cpu_exec(tnum);
