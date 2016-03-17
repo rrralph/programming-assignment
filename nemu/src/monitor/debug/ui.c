@@ -3,6 +3,8 @@
 #include "monitor/watchpoint.h"
 #include "nemu.h"
 
+#include <string.h>
+
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -41,17 +43,22 @@ static int cmd_si(char *args) {
 	char *ins=strtok(args," ");	
 	ins=strtok(NULL," ");
 	if(ins==NULL){
-		cpu_exec(5);
-		return 0;
-	}else if((*ins-'0')>0){
-		int tnum=*ins-'0';
+		cpu_exec(1);
+	}else{
+		int i=0,slen=sizeof(*ins)-1;
+		for(;i<slen;i++){
+			if(*(ins+i)-'0'<0){
+				printf("unvalid args");
+				return -1;
+			}
+		}
+		int tnum=0;
+		for(i=0;i<slen;i++){
+			tnum=(*(ins+i)-'0')+tnum*10; 
+		}
 		cpu_exec(tnum);
-		return 0;
-	}else {
-		printf("unvalid args"); 
-		return -1;
 	}
-	
+	return 0;	
 }
 static struct {
 	char *name;
