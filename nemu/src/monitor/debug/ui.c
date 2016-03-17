@@ -52,7 +52,7 @@ static int cmd_si(char *args) {
 			}
 		}
 		int tnum=0;
-		printf("%d",slen);
+		printf("%dslen",slen);
 		for(i=0;i<slen;i++){
 			tnum=(ins[i]-'0')+tnum*10; 
 		}
