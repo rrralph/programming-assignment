@@ -52,8 +52,8 @@ static int cmd_si(char *args) {
 			}
 		}
 		int tnum=0;
+		printf("%d",slen);
 		for(i=0;i<slen;i++){
-			printf("%d  ",tnum);
 			tnum=(ins[i]-'0')+tnum*10; 
 		}
 		cpu_exec(tnum);
