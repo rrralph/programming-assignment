@@ -53,7 +53,7 @@ static int cmd_si(char *args) {
 			}
 		}
 		int tnum=0;
-		for(i=0;i<=slen;i++){
+		for(i=0;i<slen;i++){
 			tnum=(ins[i]-'0')+tnum*10; 
 		}
 		cpu_exec(tnum);
