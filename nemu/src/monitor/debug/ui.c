@@ -63,14 +63,14 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
 	char *des=strtok(args," ");
 	if(*des=='r'){
-		printf("EAX: %x    %d\n",cpu.eax,cpu.eax);
-		printf("ECX: %x    %d\n",cpu.ecx,cpu.ecx);
-		printf("EDX: %x    %d\n",cpu.edx,cpu.edx);
-		printf("EBX: %x    %d\n",cpu.ebx,cpu.ebx);
-		printf("ESP: %x    %d\n",cpu.esp,cpu.esp);
-		printf("EBP: %x    %d\n",cpu.ebp,cpu.ebp);
-		printf("ESI: %x    %d\n",cpu.esi,cpu.esi);
-		printf("EDI: %x    %d\n",cpu.edi,cpu.edi);
+		printf("EAX: 0x%x    %d\n",cpu.eax,cpu.eax);
+		printf("ECX: 0x%x    %d\n",cpu.ecx,cpu.ecx);
+		printf("EDX: 0x%x    %d\n",cpu.edx,cpu.edx);
+		printf("EBX: 0x%x    %d\n",cpu.ebx,cpu.ebx);
+		printf("ESP: 0x%x    %d\n",cpu.esp,cpu.esp);
+		printf("EBP: 0x%x    %d\n",cpu.ebp,cpu.ebp);
+		printf("ESI: 0x%x    %d\n",cpu.esi,cpu.esi);
+		printf("EDI: 0x%x    %d\n",cpu.edi,cpu.edi);
 	}else if(*des=='w'){
 		printf("watch \n");
 	}else printf("Invalid args!\n");
