@@ -77,15 +77,11 @@ static int cmd_info(char *args) {
 	return 0;
 }
 static int cmd_x(char *args){
-	char *argsNum=strtok(args," ");
+	//char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
-	int cnt=*argsNum-'0';
+	//int cnt=*argsNum-'0';
 	printf("%s: \n",desIndex);
-	printf("%x \n",*(int *)cpu.eip);
-	int i;
-	for(i=1;i<=cnt;i++){
-		printf("%x\t",*(desIndex+i));
-	}
+	printf("%x \n",*(int *)(cpu.eip));
 	return 0;
 }
 static struct {
