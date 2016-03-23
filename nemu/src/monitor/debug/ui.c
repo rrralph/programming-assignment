@@ -81,7 +81,7 @@ static int cmd_x(char *args){
 	char *desIndex=strtok(NULL," ");
 	int cnt=*argsNum-'0';
 	printf("%s: \n",desIndex);
-	printf("%x: \n",cpu.eip);
+	printf("%x \n",*(char *)0x100000);
 	int i;
 	for(i=1;i<=cnt;i++){
 		printf("%x\t",*(desIndex+i));
