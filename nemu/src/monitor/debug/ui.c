@@ -81,7 +81,7 @@ static int cmd_x(char *args){
 	//char *desIndex=strtok(NULL," ");
 	//int cnt=*argsNum-'0';
 	//printf("%s: \n",desIndex);
-	printf("%c \n",((int *)(cpu.eip))[0]);
+	printf("%d \n",*((int *)(cpu.eip)));
 	return 0;
 }
 static struct {
