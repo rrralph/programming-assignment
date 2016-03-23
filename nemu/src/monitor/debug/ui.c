@@ -63,14 +63,14 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
 	char *des=strtok(args," ");
 	if(*des=='r'){
-		printf("EAX: %x\n",cpu.eax);
-		printf("ECX: %x\n",cpu.ecx);
-		printf("EDX: %x\n",cpu.edx);
-		printf("EBX: %x\n",cpu.ebx);
-		printf("ESP: %x\n",cpu.esp);
-		printf("EBP: %x\n",cpu.ebp);
-		printf("ESI: %x\n",cpu.esi);
-		printf("EDI: %x\n",cpu.edi);
+		printf("EAX: %x    %d\n",cpu.eax,cpu.eax);
+		printf("ECX: %x    %d\n",cpu.ecx,cpu.ecx);
+		printf("EDX: %x    %d\n",cpu.edx,cpu.edx);
+		printf("EBX: %x    %d\n",cpu.ebx,cpu.ebx);
+		printf("ESP: %x    %d\n",cpu.esp,cpu.esp);
+		printf("EBP: %x    %d\n",cpu.ebp,cpu.ebp);
+		printf("ESI: %x    %d\n",cpu.esi,cpu.esi);
+		printf("EDI: %x    %d\n",cpu.edi,cpu.edi);
 	}else if(*des=='w'){
 		printf("watch \n");
 	}else printf("Invalid args!\n");
