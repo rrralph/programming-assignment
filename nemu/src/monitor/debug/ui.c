@@ -79,7 +79,12 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args){
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
-	printf("%s,%s",argsNum,desIndex);
+	int cnt=*argsNum-'0';
+	printf("%x: \n",*desIndex);
+	int i;
+	for(i=1;i<=cnt;i++){
+		printf("%x\t",*(desIndex+i));
+	}
 	return 0;
 }
 static struct {
