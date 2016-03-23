@@ -78,10 +78,10 @@ static int cmd_info(char *args) {
 }
 static int cmd_x(char *args){
 	//char *argsNum=strtok(args," ");
-	char *desIndex=strtok(NULL," ");
+	//char *desIndex=strtok(NULL," ");
 	//int cnt=*argsNum-'0';
-	printf("%s: \n",desIndex);
-	printf("%x \n",*(int *)(cpu.eip));
+	//printf("%s: \n",desIndex);
+	printf("%c \n",((int *)(cpu.eip))[0]);
 	return 0;
 }
 static struct {
