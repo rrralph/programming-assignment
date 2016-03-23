@@ -80,7 +80,8 @@ static int cmd_x(char *args){
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
 	int cnt=*argsNum-'0';
-	printf("%x: \n",*desIndex);
+	printf("%s: \n",desIndex);
+	printf("%x: \n",0x100000);
 	int i;
 	for(i=1;i<=cnt;i++){
 		printf("%x\t",*(desIndex+i));
