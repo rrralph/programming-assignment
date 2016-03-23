@@ -76,6 +76,12 @@ static int cmd_info(char *args) {
 	}else printf("Invalid args!\n");
 	return 0;
 }
+static int cmd_x(char *args){
+	char *argsNum=strtok(args," ");
+	char *desIndex=strtok(NULL," ");
+	printf("%s,%s",argsNum,desIndex);
+	return 0;
+}
 static struct {
 	char *name;
 	char *description;
@@ -85,7 +91,8 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
         { "si", "Execute N instructions then halt", cmd_si },
-	{ "info", "Info r means print the registers, Info w means print watchpoints", cmd_info }
+	{ "info", "Info r means print the registers, Info w means print watchpoints", cmd_info },
+	{ "x", "...", cmd_x }
 	/* TODO: Add more commands */
 
 };
