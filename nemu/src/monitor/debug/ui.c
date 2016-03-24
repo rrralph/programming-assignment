@@ -76,6 +76,12 @@ static int cmd_info(char *args) {
 	}else printf("Invalid args!\n");
 	return 0;
 }
+static void print_4byte(swaddr_t addr)
+{
+	int i=1;
+	for(;i<=4;i++)
+		printf("%02x",swaddr_read(addr,1));
+}
 static int cmd_x(char *args){
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
@@ -86,10 +92,9 @@ static int cmd_x(char *args){
 	}
 	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
-	
 	int j,k,i=0;
-	int cnt=bnum/4+1;
-	for(;i<cnt-1;i++)
+	int cnt=bnum/4;
+	for(;i<cnt;i++)
 	{
 	    	printf("%x:  ",hwdes+i*16);
 		for(j=1;j<=4;j++)
@@ -97,13 +102,21 @@ static int cmd_x(char *args){
 			printf("0x");
 			for(k=1;k<=4;k++)
 			{
-				printf("%02x",swaddr_read(hwdes+i*16+(j-1)*4+k-1,1));
+				//printf("%02x",swaddr_read(hwdes+i*16+(j-1)*4+k-1,1));
+				print_4byte(hwdes+i*16+(j-1)*4+k-1);
 
 			}
 			printf("\t");
 
 		}
 		printf("\n");
+	}
+	int frac=bnum-cnt*4;
+	printf("%x:  ",hwdes+cnt*16);
+	for(i=1;i<=frac;i++)
+	{
+		printf("0x");
+		print_4byte(hwdes+cnt*16+i-1);
 	}
 /*	
 	for(;i<=cnt;i++){
