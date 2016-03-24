@@ -79,22 +79,40 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args){
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
+	if(argsNum==NULL||desIndex==NULL)
+	{
+		printf("Lack arguments!");
+		return 0;
+	}
 	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
-	printf("%s\t",desIndex);
-	int i=1,cnt=bnum*4;
 	
+	printf("%s\t",desIndex);
+	int j,k,i=0;
+	int cnt=bnum/4+1;
+	for(;i<cnt-1;i++)
+	{
+		printf("0x%x:",hwdes+i*16);
+		for(j=1;j<=4;j++)
+		{
+			printf("0x");
+			for(k=1;k<=4;k++)
+			{
+				printf("%02x",hwdes+i*16+(j-1)*4+k-1);
+
+			}
+			printf("\t");
+
+		}
+		printf("\n");
+	}
+/*	
 	for(;i<=cnt;i++){
 		printf("%02x",swaddr_read(hwdes+i-1,1));
 		if(!(i%4)&&(i%16)) printf("\t");
 		else if(!(i%16)) printf("\n\t");
 		
-	}
-	//printf("%d  %x \n",cnt,atoi(desIndex));
-	//printf("%x  ",swaddr_read(0x100005,4));
-
-//	uint32_t *p = (uint32_t*)(0x100000);
-//	printf("%d",p[0]);
+	}*/
 	return 0;
 }
 static struct {
