@@ -85,7 +85,7 @@ static int cmd_x(char *args){
 	int i=1,cnt=bnum*4;
 	
 	for(;i<=cnt;i++){
-		printf("%2x",swaddr_read(hwdes+i-1,1));
+		printf("%02x",swaddr_read(hwdes+i-1,1));
 		if(i%4==0) printf("\n");
 		
 	}
