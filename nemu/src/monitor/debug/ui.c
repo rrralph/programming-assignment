@@ -82,10 +82,10 @@ static int cmd_x(char *args){
 	//int cnt=*argsNum-'0';
 	//printf("%s: \n",desIndex);
 	int i=1;
-	for(;i<10;i++)
+	for(;i<30;i++)
 	{
 	printf("%02x",swaddr_read(0x100000+i-1,1));
-	if((i % 4)==0) printf("\n");
+	if((i % 5)==0) printf("\n");
 	}
 
 //	uint32_t *p = (uint32_t*)(0x100000);
