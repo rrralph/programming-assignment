@@ -80,8 +80,13 @@ static int cmd_x(char *args){
 //	printf("%x\n",(uint32_t)strtoul("0x1000",0,0));
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
-	printf("%d\n",(uint32_t)strtoul(argsNum,0,0));
-	printf("%x\n",(uint32_t)strtoul(desIndex,0,0));
+	unsigned int cnt=(uint32_t)strtoul(argsNum,0,0);
+	printf("%s:\n",desIndex);
+	uint16_t hwdes=(uint32_t)strtoul(desIndex,0,0);
+	int i=0;
+	for(;i<cnt;i++){
+		printf("%x  ",swaddr_read(hwdes+i,1));
+	}
 	//printf("%d  %x \n",cnt,atoi(desIndex));
 	//printf("%x  ",swaddr_read(0x100005,4));
 
