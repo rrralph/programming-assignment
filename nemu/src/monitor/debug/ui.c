@@ -83,7 +83,7 @@ static int cmd_x(char *args){
 	//printf("%s: \n",desIndex);
 	int i=0;
 	for(;i<10;i++)
-	printf("%x\n",swaddr_read(0x100000+i,4));
+	printf("%x\n",swaddr_read(0x100000+i,2));
 
 //	uint32_t *p = (uint32_t*)(0x100000);
 //	printf("%d",p[0]);
