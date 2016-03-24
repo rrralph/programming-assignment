@@ -84,7 +84,7 @@ static int cmd_x(char *args){
 	int i=0;
 	for(;i<10;i++)
 	{
-	printf("%2x",swaddr_read(0x100000+i,1));
+	printf("%02x",swaddr_read(0x100000+i,1));
 	if(i&((i % 4)==0)) printf("\n");
 	}
 
