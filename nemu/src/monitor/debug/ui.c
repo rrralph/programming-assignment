@@ -87,11 +87,13 @@ static int cmd_x(char *args){
 	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
 	
-	int j,k,i=0;
+	int l,j,k,i=0;
 	int cnt=bnum/4+1;
 	for(;i<cnt-1;i++)
 	{
-		printf("0x%x:",swaddr_read(hwdes+i*16,1));
+		printf("0x");
+		for(l=1;l<=4;l++)
+			printf("%02x:",swaddr_read(hwdes+i*16+l-1,1));
 		for(j=1;j<=4;j++)
 		{
 			printf("0x");
