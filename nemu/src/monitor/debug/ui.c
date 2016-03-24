@@ -81,7 +81,12 @@ static int cmd_x(char *args){
 	//char *desIndex=strtok(NULL," ");
 	//int cnt=*argsNum-'0';
 	//printf("%s: \n",desIndex);
-	printf("%x",swaddr_read(0x100000,2));
+	printf("%x",swaddr_read(0x100000,1));
+	printf("%x",swaddr_read(0x100001,1));
+	printf("%x",swaddr_read(0x100002,1));
+	printf("%x",swaddr_read(0x100003,1));
+	printf("%x",swaddr_read(0x100004,1));
+	printf("%x",swaddr_read(0x100005,1));
 
 //	uint32_t *p = (uint32_t*)(0x100000);
 //	printf("%d",p[0]);
