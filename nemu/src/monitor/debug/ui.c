@@ -84,6 +84,8 @@ static int cmd_x(char *args){
 	printf("%x  ",swaddr_read(0x100005,4));
 	printf("%x  ",swaddr_read(0x100006,4));
 	printf("%x  ",swaddr_read(0x100007,4));
+	printf("%x  ",swaddr_read(0x100008,4));
+	printf("%x  ",swaddr_read(0x100009,4));
 
 //	uint32_t *p = (uint32_t*)(0x100000);
 //	printf("%d",p[0]);
