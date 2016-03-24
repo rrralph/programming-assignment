@@ -77,15 +77,12 @@ static int cmd_info(char *args) {
 	return 0;
 }
 static int cmd_x(char *args){
-//	char *argsNum=strtok(args," ");
-//	char *desIndex=strtok(NULL," ");
-	//int cnt=*argsNum-'0';
-	//printf("%s: \n",desIndex);
-	printf("%x  ",swaddr_read(0x100005,4));
-	printf("%x  ",swaddr_read(0x100006,4));
-	printf("%x  ",swaddr_read(0x100007,4));
-	printf("%x  ",swaddr_read(0x100008,4));
-	printf("%x  ",swaddr_read(0x100009,4));
+	char *argsNum=strtok(args," ");
+	char *desIndex=strtok(NULL," ");
+	int cnt=atoi(argsNum);
+	printf("%s: \n",desIndex);
+	printf("%d  %x \n",cnt,atoi(desIndex));
+	//printf("%x  ",swaddr_read(0x100005,4));
 
 //	uint32_t *p = (uint32_t*)(0x100000);
 //	printf("%d",p[0]);
