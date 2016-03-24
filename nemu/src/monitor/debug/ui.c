@@ -80,7 +80,7 @@ static void print_4byte(swaddr_t addr)
 {
 	int i=1;
 	for(;i<=4;i++)
-		printf("%02x",swaddr_read(addr,1));
+		printf("%02x",swaddr_read(addr+i-1,1));
 }
 static int cmd_x(char *args){
 	char *argsNum=strtok(args," ");
