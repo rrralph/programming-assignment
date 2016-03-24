@@ -80,9 +80,9 @@ static int cmd_x(char *args){
 //	printf("%x\n",(uint32_t)strtoul("0x1000",0,0));
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
-	unsigned int cnt=(uint32_t)strtoul(argsNum,NULL,0);
+	unsigned int cnt=(uint32_t)strtoul(argsNum,NULL,16);
 	printf("%s:\n",desIndex);
-	uint16_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
+	uint16_t hwdes=(uint32_t)strtoul(desIndex,NULL,16);
 	cnt++;
 	printf("%x",hwdes);
 /*	int i=0;
