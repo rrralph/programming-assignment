@@ -77,7 +77,7 @@ static int cmd_info(char *args) {
 	return 0;
 }
 static int cmd_x(char *args){
-	printf("%x\n",atoi("0x1000"));
+	printf("%x\n",atoi("1000"));
 	//char *argsNum=strtok(args," ");
 	//char *desIndex=strtok(NULL," ");
 	//int cnt=atoi(argsNum);
