@@ -82,7 +82,7 @@ static int cmd_x(char *args){
 	char *desIndex=strtok(NULL," ");
 	unsigned int cnt=(uint32_t)strtoul(argsNum,NULL,16);
 	printf("%s:\n",desIndex);
-	uint16_t hwdes=(int)strtoul(desIndex,NULL,16);
+	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,16);
 	cnt++;
 	printf("%d    %ld",hwdes,strtoul(desIndex,NULL,16));
 /*	int i=0;
