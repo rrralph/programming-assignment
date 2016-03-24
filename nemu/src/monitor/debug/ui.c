@@ -79,13 +79,15 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args){
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
-	uint32_t cnt=(uint32_t)strtoul(argsNum,NULL,0);
+	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
 	printf("%s:\n",desIndex);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
-	int i=0;
+	int i=1,cnt=bnum*4;
 	
-	for(;i<cnt;i++){
-		printf("%x  ",swaddr_read(hwdes+i,1));
+	for(;i<=cnt;i++){
+		printf("%2x",swaddr_read(hwdes+i,1));
+		if(i%4==0) printf("\n");
+		
 	}
 	//printf("%d  %x \n",cnt,atoi(desIndex));
 	//printf("%x  ",swaddr_read(0x100005,4));
