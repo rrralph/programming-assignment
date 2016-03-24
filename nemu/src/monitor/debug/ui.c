@@ -84,7 +84,7 @@ static int cmd_x(char *args){
 	printf("%s:\n",desIndex);
 	uint16_t hwdes=(int)strtoul(desIndex,NULL,16);
 	cnt++;
-	printf("%x    %lx",hwdes,strtoul(desIndex,NULL,16));
+	printf("%d    %ld",hwdes,strtoul(desIndex,NULL,16));
 /*	int i=0;
 	
 	for(;i<cnt;i++){
