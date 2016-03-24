@@ -81,13 +81,13 @@ static int cmd_x(char *args){
 	char *desIndex=strtok(NULL," ");
 	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
-	printf("%s:    ",desIndex);
+	printf("%s\t",desIndex);
 	int i=1,cnt=bnum*4;
 	
 	for(;i<=cnt;i++){
 		printf("%02x",swaddr_read(hwdes+i-1,1));
 		if(!(i%4)&&(i%16)) printf("\t");
-		else if(!(i%16)) printf("\n");
+		else if(!(i%16)) printf("\n\t");
 		
 	}
 	//printf("%d  %x \n",cnt,atoi(desIndex));
