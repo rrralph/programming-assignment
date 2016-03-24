@@ -80,12 +80,12 @@ static int cmd_x(char *args){
 	char *argsNum=strtok(args," ");
 	char *desIndex=strtok(NULL," ");
 	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
-	printf("%s:\n",desIndex);
+	printf("%s:    ",desIndex);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
 	int i=1,cnt=bnum*4;
 	
 	for(;i<=cnt;i++){
-		printf("%02x",swaddr_read(hwdes+i-1,1));
+		printf("%02x  ",swaddr_read(hwdes+i-1,1));
 		if(i%4==0) printf("\n");
 		
 	}
