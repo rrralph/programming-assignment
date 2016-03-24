@@ -85,7 +85,7 @@ static int cmd_x(char *args){
 	for(;i<10;i++)
 	{
 	printf("%x",swaddr_read(0x100000+i,4));
-	if(i&!(i % 4)) printf("\n");
+	if(i&((i % 4)==0)) printf("\n");
 	}
 
 //	uint32_t *p = (uint32_t*)(0x100000);
