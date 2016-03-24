@@ -116,6 +116,8 @@ static int cmd_x(char *args){
 	{
 		printf("0x");
 		print_4byte(hwdes+cnt*16+i-1);
+		if(i<frac) printf("\t");
+		else printf("\n");
 	}
 /*	
 	for(;i<=cnt;i++){
