@@ -92,7 +92,7 @@ static int cmd_x(char *args){
 	}
 	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
-	int j,k,i=0;
+	int j,i=0;
 	int cnt=bnum/4;
 	for(;i<cnt;i++)
 	{
@@ -100,10 +100,9 @@ static int cmd_x(char *args){
 		for(j=1;j<=4;j++)
 		{
 			printf("0x");
-			for(k=1;k<=4;k++)
 			{
 				//printf("%02x",swaddr_read(hwdes+i*16+(j-1)*4+k-1,1));
-				print_4byte(hwdes+i*16+(j-1)*4+k-1);
+				print_4byte(hwdes+i*16+(j-1)*4);
 
 			}
 			printf("\t");
