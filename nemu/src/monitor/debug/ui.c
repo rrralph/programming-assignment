@@ -93,7 +93,7 @@ static int cmd_x(char *args){
 	{
 		printf("0x");
 		for(l=1;l<=4;l++)
-			printf("%02x",swaddr_read(hwdes+i*16+l-1,1));
+			printf("%02x",hwdes+i*16+l-1);
 		printf(":  ");
 		for(j=1;j<=4;j++)
 		{
