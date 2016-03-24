@@ -91,13 +91,13 @@ static int cmd_x(char *args){
 	int cnt=bnum/4+1;
 	for(;i<cnt-1;i++)
 	{
-		printf("0x%x:",hwdes+i*16);
+		printf("0x%x:",swaddr_read(hwdes+i*16,1));
 		for(j=1;j<=4;j++)
 		{
 			printf("0x");
 			for(k=1;k<=4;k++)
 			{
-				printf("%02x",hwdes+i*16+(j-1)*4+k-1);
+				printf("%02x",swaddr_read(hwdes+i*16+(j-1)*4+k-1,1));
 
 			}
 			printf("\t");
