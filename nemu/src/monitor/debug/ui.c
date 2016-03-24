@@ -81,7 +81,7 @@ static int cmd_x(char *args){
 	//char *desIndex=strtok(NULL," ");
 	//int cnt=*argsNum-'0';
 	//printf("%s: \n",desIndex);
-	printf("%x",swaddr_read(0x10000,4));
+	printf("%x",swaddr_read(0x10000,2));
 
 	printf("%x",swaddr_read(0x10001,4));
 	printf("%x",swaddr_read(0x10002,4));
