@@ -86,7 +86,7 @@ static int cmd_x(char *args){
 	
 	for(;i<=cnt;i++){
 		printf("%02x",swaddr_read(hwdes+i-1,1));
-		if((!i%4)&&(i%16)) printf("\n");
+		if((i%4==0)&&(i%16)) printf("\n");
 		
 	}
 	//printf("%d  %x \n",cnt,atoi(desIndex));
