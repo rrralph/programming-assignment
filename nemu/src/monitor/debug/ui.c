@@ -87,7 +87,6 @@ static int cmd_x(char *args){
 	uint32_t bnum=(uint32_t)strtoul(argsNum,NULL,0);
 	uint32_t hwdes=(uint32_t)strtoul(desIndex,NULL,0);
 	
-	printf("%s\t",desIndex);
 	int j,k,i=0;
 	int cnt=bnum/4+1;
 	for(;i<cnt-1;i++)
