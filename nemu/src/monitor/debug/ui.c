@@ -136,9 +136,9 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-        { "si", "Execute N instructions then halt", cmd_si },
-	{ "info", "Info r means print the registers, Info w means print watchpoints", cmd_info },
-	{ "x", "...", cmd_x }
+        { "si", "Step one instruction exactly", cmd_si },
+	{ "info", "Info r lists all the registers and their contents, Info w lists all the watchpoints", cmd_info },
+	{ "x", "Examine memory N 4 bytes", cmd_x }
 	/* TODO: Add more commands */
 
 };
