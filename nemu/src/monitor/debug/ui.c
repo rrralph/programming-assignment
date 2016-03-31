@@ -63,14 +63,15 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
 	char *des=strtok(args," ");
 	if(*des=='r'){
-		printf("EAX: 0x%x    %d\n",cpu.eax,cpu.eax);
-		printf("ECX: 0x%x    %d\n",cpu.ecx,cpu.ecx);
-		printf("EDX: 0x%x    %d\n",cpu.edx,cpu.edx);
-		printf("EBX: 0x%x    %d\n",cpu.ebx,cpu.ebx);
-		printf("ESP: 0x%x    %d\n",cpu.esp,cpu.esp);
-		printf("EBP: 0x%x    %d\n",cpu.ebp,cpu.ebp);
-		printf("ESI: 0x%x    %d\n",cpu.esi,cpu.esi);
-		printf("EDI: 0x%x    %d\n",cpu.edi,cpu.edi);
+		printf("eax: 0x%x    %d\n",cpu.eax,cpu.eax);
+		printf("ecx: 0x%x    %d\n",cpu.ecx,cpu.ecx);
+		printf("edx: 0x%x    %d\n",cpu.edx,cpu.edx);
+		printf("ebx: 0x%x    %d\n",cpu.ebx,cpu.ebx);
+		printf("esp: 0x%x    %d\n",cpu.esp,cpu.esp);
+		printf("ebp: 0x%x    %d\n",cpu.ebp,cpu.ebp);
+		printf("esi: 0x%x    %d\n",cpu.esi,cpu.esi);
+		printf("edi: 0x%x    %d\n",cpu.edi,cpu.edi);
+		printf("eip: 0x%x    %d\n",cpu.eip,cpu.eip);
 	}else if(*des=='w'){
 		printf("watch \n");
 	}else printf("Invalid args!\n");
@@ -78,8 +79,8 @@ static int cmd_info(char *args) {
 }
 static void print_4byte(swaddr_t addr)
 {
-	int i=1;
-	for(;i<=4;i++)
+	int i=4;
+	for(;i>=1;i--)
 		printf("%02x",swaddr_read(addr+i-1,1));
 }
 static int cmd_x(char *args){
@@ -115,7 +116,7 @@ static int cmd_x(char *args){
 	for(i=1;i<=frac;i++)
 	{
 		printf("0x");
-		print_4byte(hwdes+cnt*16+i-1);
+		print_4byte(hwdes+cnt*16+(i-1)*4);
 		if(i<frac) printf("\t");
 		else printf("\n");
 	}
@@ -136,9 +137,9 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-        { "si", "Execute N instructions then halt", cmd_si },
-	{ "info", "Info r means print the registers, Info w means print watchpoints", cmd_info },
-	{ "x", "...", cmd_x }
+        { "si", "Step one instruction exactly", cmd_si },
+	{ "info", "Info r lists all the registers and their contents, Info w lists all the watchpoints", cmd_info },
+	{ "x", "Examine memory N 4 bytes", cmd_x }
 	/* TODO: Add more commands */
 
 };
