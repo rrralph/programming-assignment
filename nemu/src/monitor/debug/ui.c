@@ -101,11 +101,7 @@ static int cmd_x(char *args){
 		for(j=1;j<=4;j++)
 		{
 			printf("0x");
-			{
-				//printf("%02x",swaddr_read(hwdes+i*16+(j-1)*4+k-1,1));
-				print_4byte(hwdes+i*16+(j-1)*4);
-
-			}
+			print_4byte(hwdes+i*16+(j-1)*4);
 			printf("\t");
 
 		}
@@ -120,13 +116,13 @@ static int cmd_x(char *args){
 		if(i<frac) printf("\t");
 		else printf("\n");
 	}
-/*	
-	for(;i<=cnt;i++){
-		printf("%02x",swaddr_read(hwdes+i-1,1));
-		if(!(i%4)&&(i%16)) printf("\t");
-		else if(!(i%16)) printf("\n\t");
-		
-	}*/
+	return 0;
+}
+static int cmd_p(char *args){
+	printf("%s\n",args);
+	bool s=true;
+	expr(args,&s);
+
 	return 0;
 }
 static struct {
@@ -139,7 +135,8 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
         { "si", "Step one instruction exactly", cmd_si },
 	{ "info", "Info r lists all the registers and their contents, Info w lists all the watchpoints", cmd_info },
-	{ "x", "Examine memory N 4 bytes", cmd_x }
+	{ "x", "Examine memory N 4 bytes", cmd_x },
+	{ "p", "Evaluate EXPR",cmd_p }
 	/* TODO: Add more commands */
 
 };
