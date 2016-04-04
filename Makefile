@@ -69,4 +69,4 @@ test: $(nemu_BIN) $(testcase_BIN) entry
 	bash test.sh $(testcase_BIN)
 
 submit: clean
-	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
+	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > 14307130066.tar.bz2
