@@ -30,16 +30,7 @@ static struct rule {
 	{"\\(", '('},
 	{"\\)", ')'},
 	{"==", EQ},						// equal
-	{"0",DIGIT},
-	{"1",DIGIT},
-	{"2",DIGIT},
-	{"3",DIGIT},
-	{"4",DIGIT},
-	{"5",DIGIT},
-	{"6",DIGIT},
-	{"7",DIGIT},
-	{"8",DIGIT},
-	{"9",DIGIT},
+	{"[0-9]",DIGIT}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -94,8 +85,24 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
+					case NOTYPE:
+					case EQ:
+					case '+':
+					case '-':
+					case '*':
+					case '/':
+					case '(':
+					case ')':
+					    tokens[nr_token].type=rules[i].token_type;  
+					    break;	
+					case DIGIT:
+					    tokens[nr_token].type=rules[i].token_type;  
+					    sprintf(tokens[nr_token].str,"%.*s",substr_len,substr_start);
+					    printf("%s\n",tokens[nr_token].str);
+					    break;
 					default: panic("please implement me");
 				}
+				nr_token++;
 
 				break;
 			}
