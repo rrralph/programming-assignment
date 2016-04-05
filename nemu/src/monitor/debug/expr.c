@@ -96,13 +96,11 @@ static bool make_token(char *e) {
 					case '(':
 					case ')':
 					    tokens[nr_token].type=rules[i].token_type;  
-					    //printf("%d\n",tokens[nr_token].type);
 				            nr_token++;
 					    break;	
 					case NUM:
 					    tokens[nr_token].type=rules[i].token_type;  
 					    sprintf(tokens[nr_token].str,"%.*s",substr_len,substr_start);
-					    //printf("%d\n",tokens[nr_token].type);
 
 				            nr_token++;
 					    break;
@@ -121,39 +119,58 @@ static bool make_token(char *e) {
 
 	return true; 
 }
-bool check_parentheses(Token *p,Token *q){
-	if( p[0].type !='('|| q[0].type !=')')
-		   return false;
-        p++;
-	int leftflag=false;
-        while (p<q){ 
+bool check_validity(Token *p,Token *q){
+	if((q-p) <2) return false;
+	int leftflag=false,rightnum=0;
+        while (p<=q){ 
+	   printf("p:%d\n",(*p).type);
 	   if((*p).type=='('){
-		   if(leftflag){
-	               return false;
-		   }else leftflag=true;
+		   leftflag=true;
+		   rightnum++;
 	   }
 	   else if((*p).type==')'){
 		   if(!leftflag){
 	               return false;
-		   }else leftflag=false;
+		   }else {leftflag=false;rightnum--;}
 	   }
 	   p++;
         }	   
+	if(leftflag || rightnum) return false;
+        if(p!=(q+1)) assert(0);
+	return true;
+}
+bool check_parentheses(Token *p,Token *q){
+	if((q-p) <2) return false;
+	if( p[0].type !='('|| q[0].type !=')')
+		   return false;
+        p++;
+	int leftflag=false,rightnum=0;
+        while (p<q){ 
+	   if((*p).type=='('){
+		   leftflag=true;
+		   rightnum++;
+	   }
+	   else if((*p).type==')'){
+		   if(!leftflag){
+	               return false;
+		   }else {leftflag=false;rightnum--;}
+		   
+	   }
+	   p++;
+        }	   
+	if (leftflag==true || rightnum) return false;
         if(p!=q) assert(0);
 	return true;
 }
 Token* get_dominant_operator(Token *p,Token *q){
-	//printf("%d %d\n",p[0].type,q-p);
 	Token *t=q;
 	int position=-1;
         while(q>p){
-	//	printf("qis:%d\n",(*q).type);
 	        if((*q).type=='+'||(*q).type=='-'||(*q).type=='*'||(*q).type=='/'){
 		    Token *t2=q+1;
                     while(t2<=t&&(*t2).type!='('&&(*t2).type!=')'){
 	                t2++;
 		    } 
-	//	    printf("t2:%d",(*t2).type);
 		    if(t2==(t+1)||(*t2).type!=')'){
 		        if((*q).type=='+'||(*q).type=='-'){
 			    position=q-p;
@@ -164,24 +181,24 @@ Token* get_dominant_operator(Token *p,Token *q){
             q--;
 	}	
         if(position==-1) assert(0);
-	//printf("operator is:%c, position is :%d\n",p[position].type,position);
 	return p+position;
 }
 uint32_t eval(Token *p,Token *q){
-	//printf("p:%d q:%d \n",p[0].type,q[0].type);
 	if(p>q){
 		assert(0);
 	}
 	else if(p==q){
-		//printf("p=q\n");
+		assert((*p).type==NUM);
 		return (*p).str[0]-'0';
 	}
 	else if(check_parentheses(p,q)==true){
-		//printf("parenthese true...\n");
+		printf("parenthese true\n");
 		return eval(p+1,q-1);
 	}
 	else{
-	       // printf("get_dominantstring:%.*s\n",q-p,p);
+		bool valid=check_validity(p,q);
+		assert(valid);
+		printf("valid:%d\n",valid);
 		Token *op=get_dominant_operator(p,q);
 		int val1=eval(p,op-1);
 		int val2=eval(op+1,q);
@@ -202,12 +219,6 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-//	const int TOKENSIZE=sizeof(Token);
-
-        //printf("parentheses:%d\n",check_parentheses(tokens,tokens+(nr_token-1)));
-	//Token *op=get_dominant_operator(tokens,tokens+nr_token-1);
-	//printf("dominant operator: %c\n",op[0].type);
-
 	/* TODO: Insert codes to evaluate the expression. */
 	int v=eval(tokens,tokens+nr_token-1);
 	printf("ans:%d\n",v);
