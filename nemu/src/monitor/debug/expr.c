@@ -61,6 +61,7 @@ typedef struct token {
 
 Token tokens[32];
 int nr_token;
+//nr_token is the char signified except whiteblank
 
 static bool make_token(char *e) {
 	int position = 0;
@@ -86,6 +87,7 @@ static bool make_token(char *e) {
 
 				switch(rules[i].token_type) {
 					case NOTYPE:
+					    break;
 					case EQ:
 					case '+':
 					case '-':
@@ -94,15 +96,18 @@ static bool make_token(char *e) {
 					case '(':
 					case ')':
 					    tokens[nr_token].type=rules[i].token_type;  
+					    //printf("%d\n",tokens[nr_token].type);
+				            nr_token++;
 					    break;	
 					case NUM:
 					    tokens[nr_token].type=rules[i].token_type;  
 					    sprintf(tokens[nr_token].str,"%.*s",substr_len,substr_start);
-					    //printf("%s\n",tokens[nr_token].str);
+					    //printf("%d\n",tokens[nr_token].type);
+
+				            nr_token++;
 					    break;
 					default: panic("please implement me");
 				}
-				nr_token++;
 
 				break;
 			}
@@ -116,19 +121,18 @@ static bool make_token(char *e) {
 
 	return true; 
 }
-bool check_parentheses(char *p,char *q){
-	if( p[0] !='('|| q[0] !=')'){
+bool check_parentheses(Token *p,Token *q){
+	if( p[0].type !='('|| q[0].type !=')')
 		   return false;
-}
         p++;
 	int leftflag=false;
         while (p<q){ 
-	   if(*p=='('){
+	   if((*p).type=='('){
 		   if(leftflag){
 	               return false;
 		   }else leftflag=true;
 	   }
-	   else if(*p==')'){
+	   else if((*p).type==')'){
 		   if(!leftflag){
 	               return false;
 		   }else leftflag=false;
@@ -138,50 +142,50 @@ bool check_parentheses(char *p,char *q){
         if(p!=q) assert(0);
 	return true;
 }
-char* get_dominant_operator(char *p,char *q){
-	printf("len:%.*s\n",q-p,p);
-	char *t=q;
-	char *dopt=t;
-        while(q>=p){
-	        if(*q=='+'||*q=='-'||*q=='*'||*q=='/'){
-		    char *t2=q+1;
-                    while(t2<=t&&*t2!='('&&*t2!=')'){
+Token* get_dominant_operator(Token *p,Token *q){
+	//printf("%d %d\n",p[0].type,q-p);
+	Token *t=q;
+	int position=-1;
+        while(q>p){
+	//	printf("qis:%d\n",(*q).type);
+	        if((*q).type=='+'||(*q).type=='-'||(*q).type=='*'||(*q).type=='/'){
+		    Token *t2=q+1;
+                    while(t2<=t&&(*t2).type!='('&&(*t2).type!=')'){
 	                t2++;
 		    } 
-		    if(*t2!=')'){
-		        if(*q=='+'||*q=='-'){
-		            dopt=q;
+	//	    printf("t2:%d",(*t2).type);
+		    if(t2==(t+1)||(*t2).type!=')'){
+		        if((*q).type=='+'||(*q).type=='-'){
+			    position=q-p;
 			    break;
-			}else if(dopt==t) dopt=q;
+			}else if(position==-1) position=q-p;
 		    }
 		}
             q--;
 	}	
-        if(dopt==t)
-	{//	printf("dopt is :%c\n",dopt[0]);
-		assert(0);
-	}
-
-	printf("dopt is :%c\n",dopt[0]);
-	return dopt;
+        if(position==-1) assert(0);
+	//printf("operator is:%c, position is :%d\n",p[position].type,position);
+	return p+position;
 }
-uint32_t eval(char* p,char* q){
+uint32_t eval(Token *p,Token *q){
+	//printf("p:%d q:%d \n",p[0].type,q[0].type);
 	if(p>q){
 		assert(0);
 	}
 	else if(p==q){
-		printf("p=q\n");
-		return *p-'0';
+		//printf("p=q\n");
+		return (*p).str[0]-'0';
 	}
 	else if(check_parentheses(p,q)==true){
+		//printf("parenthese true...\n");
 		return eval(p+1,q-1);
 	}
 	else{
-	        printf("get_dominantstring:%.*s\n",q-p,p);
-		char *op=get_dominant_operator(p,q);
+	       // printf("get_dominantstring:%.*s\n",q-p,p);
+		Token *op=get_dominant_operator(p,q);
 		int val1=eval(p,op-1);
 		int val2=eval(op+1,q);
-		switch(op[0]){
+		switch(op[0].type){
 	            case '+': return val1+val2;
                     case '-': return val1-val2;
 	            case '*': return val1*val2;
@@ -193,41 +197,22 @@ uint32_t eval(char* p,char* q){
 
 	}
 }
-char *concatenation(char *dest,const char *source){
-	char *temp = (char*)malloc(sizeof(char)*(strlen(dest)+strlen(source)));
-	int i=0;
-	while(dest[i]!='\0'){
-            temp[i]=dest[i];
-	    i++;
-	}
-	int j=0;
-	while(source[j]!='\0'){
-	    temp[i++]=source[j++];
-	}
-	temp[i]='\0';
-	return temp;
-}
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
 	}
-	char *e2=strtok(e," ");
-        char *e3=NULL;	
-	while(e2!=NULL){
-            e3=concatenation(e3,e2);
-	    e2=strtok(NULL," ");
-	}
-	printf("e3is:%s\n",e3);
-        //printf("parentheses:%d\n",check_parentheses(e3,e3+strlen(e3)-1));
-	//char *op=get_dominant_operator(e3,e3+strlen(e3)-1);
-	//printf("dominant operator:%d %c\n",op-e3,op[0]);
+//	const int TOKENSIZE=sizeof(Token);
+
+        //printf("parentheses:%d\n",check_parentheses(tokens,tokens+(nr_token-1)));
+	//Token *op=get_dominant_operator(tokens,tokens+nr_token-1);
+	//printf("dominant operator: %c\n",op[0].type);
 
 	/* TODO: Insert codes to evaluate the expression. */
-	int v=eval(e3,e3+strlen(e3));
+	int v=eval(tokens,tokens+nr_token-1);
 	printf("ans:%d\n",v);
 	return v;
 	//panic("please implement me");
-	//return 0;
+//	return 0;
 }
 
