@@ -171,9 +171,9 @@ Token* get_dominant_operator(Token *p,Token *q){
 			    while(q>p&&(q-1)[0].type=='-'){
 				q--;
 			    }
-			    if(q!=p&&(q-1)[0].type=='+'){
-                                position=q-p-1;
-			    }else position=q-p;
+			    if(q==p||(q-1)[0].type==')'||(q-1)[0].type==NUM){
+                                position=q-p;
+			    }else position=q-p-1;
 			    break;
 			}else if(position==-1) position=q-p;
 		    }
