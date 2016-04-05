@@ -120,22 +120,20 @@ static bool make_token(char *e) {
 	return true; 
 }
 bool check_validity(Token *p,Token *q){
-	if((q-p) <2) return false;
-	int leftflag=false,rightnum=0;
+//	if((q-p) <2) return false;
+	int rightnum=0;
         while (p<=q){ 
-	   printf("p:%d\n",(*p).type);
+//	   printf("p:%d\n",(*p).type);
 	   if((*p).type=='('){
-		   leftflag=true;
 		   rightnum++;
 	   }
 	   else if((*p).type==')'){
-		   if(!leftflag){
-	               return false;
-		   }else {leftflag=false;rightnum--;}
+		   rightnum--;
+		   if(rightnum<0) return false;
 	   }
 	   p++;
         }	   
-	if(leftflag || rightnum) return false;
+	if(rightnum) return false;
         if(p!=(q+1)) assert(0);
 	return true;
 }
@@ -144,28 +142,25 @@ bool check_parentheses(Token *p,Token *q){
 	if( p[0].type !='('|| q[0].type !=')')
 		   return false;
         p++;
-	int leftflag=false,rightnum=0;
+	int rightnum=0;
         while (p<q){ 
 	   if((*p).type=='('){
-		   leftflag=true;
 		   rightnum++;
 	   }
 	   else if((*p).type==')'){
-		   if(!leftflag){
-	               return false;
-		   }else {leftflag=false;rightnum--;}
-		   
+		   rightnum--;
+		   if(rightnum<0) return false;
 	   }
 	   p++;
         }	   
-	if (leftflag==true || rightnum) return false;
+	if (rightnum) return false;
         if(p!=q) assert(0);
 	return true;
 }
 Token* get_dominant_operator(Token *p,Token *q){
 	Token *t=q;
 	int position=-1;
-        while(q>p){
+        while(q>=p){
 	        if((*q).type=='+'||(*q).type=='-'||(*q).type=='*'||(*q).type=='/'){
 		    Token *t2=q+1;
                     while(t2<=t&&(*t2).type!='('&&(*t2).type!=')'){
@@ -173,7 +168,12 @@ Token* get_dominant_operator(Token *p,Token *q){
 		    } 
 		    if(t2==(t+1)||(*t2).type!=')'){
 		        if((*q).type=='+'||(*q).type=='-'){
-			    position=q-p;
+			    while(q>p&&(q-1)[0].type=='-'){
+				q--;
+			    }
+			    if(q!=p&&(q-1)[0].type=='+'){
+                                position=q-p-1;
+			    }else position=q-p;
 			    break;
 			}else if(position==-1) position=q-p;
 		    }
@@ -181,6 +181,7 @@ Token* get_dominant_operator(Token *p,Token *q){
             q--;
 	}	
         if(position==-1) assert(0);
+	printf("dom:%d\n",p[position].type);
 	return p+position;
 }
 uint32_t eval(Token *p,Token *q){
@@ -192,24 +193,28 @@ uint32_t eval(Token *p,Token *q){
 		return (*p).str[0]-'0';
 	}
 	else if(check_parentheses(p,q)==true){
-		printf("parenthese true\n");
+//		printf("parenthese true\n");
 		return eval(p+1,q-1);
 	}
 	else{
 		bool valid=check_validity(p,q);
 		assert(valid);
-		printf("valid:%d\n",valid);
+//		printf("valid:%d\n",valid);
 		Token *op=get_dominant_operator(p,q);
-		int val1=eval(p,op-1);
-		int val2=eval(op+1,q);
-		switch(op[0].type){
-	            case '+': return val1+val2;
-                    case '-': return val1-val2;
-	            case '*': return val1*val2;
-	            case '/': 
-			assert(val2);
-	                return val1/val2;
-                    default: assert(0);
+		if(p<op){
+		    int val1=eval(p,op-1);
+		    int val2=eval(op+1,q);
+		    switch(op[0].type){
+	                case '+': return val1+val2;
+                        case '-': return val1-val2;
+	                case '*': return val1*val2;
+	                case '/': 
+			    assert(val2);
+	                    return val1/val2;
+                        default: assert(0);
+		    }
+		}else {
+		    return -1*(eval(p+1,q));
 		}
 
 	}
