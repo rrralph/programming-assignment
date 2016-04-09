@@ -31,7 +31,7 @@ static struct rule {
 	{"\\(", '('},
 	{"\\)", ')'},
 	{"==", EQ},						// equal
-	{"[0-9]+",NUM}
+	{"(0x)?[0-9]+",NUM}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
