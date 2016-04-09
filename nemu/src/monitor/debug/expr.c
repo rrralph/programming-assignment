@@ -5,6 +5,7 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
 
 enum {
 	NOTYPE = 256, EQ,
@@ -30,7 +31,7 @@ static struct rule {
 	{"\\(", '('},
 	{"\\)", ')'},
 	{"==", EQ},						// equal
-	{"[0-9]",NUM}
+	{"[0-9]+",NUM}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -190,7 +191,7 @@ uint32_t eval(Token *p,Token *q){
 	}
 	else if(p==q){
 		assert((*p).type==NUM);
-		return (*p).str[0]-'0';
+		return (strtol((*p).str,NULL,0));
 	}
 	else if(check_parentheses(p,q)==true){
 //		printf("parenthese true\n");
