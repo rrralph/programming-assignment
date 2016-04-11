@@ -8,8 +8,16 @@
 #include <stdlib.h>
 
 enum {
-	NOTYPE = 256, EQ,
-        NUM = 10
+	NOTYPE = 256,
+       	EQ = 257,
+	NEQ = 258,
+	AND = 259,
+        OR = 260,
+	INVERSION = 261,
+	POINTER = 262,
+	NEGATIVE = 263,
+        NUM = 10,
+	REGISTER=11
 	/* TODO: Add more token types */
 
 };
@@ -31,7 +39,13 @@ static struct rule {
 	{"\\(", '('},
 	{"\\)", ')'},
 	{"==", EQ},						// equal
-	{"(0x)?[0-9]+",NUM}
+	{"!=", NEQ},
+	{"&&", AND},
+	{"\\|\\|", OR},
+	{"!", INVERSION},
+	{"0x[0-9 a-f A-F]+",NUM},
+	{"[0-9]+",NUM},
+	{"\\$",REGISTER}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -90,6 +104,10 @@ static bool make_token(char *e) {
 					case NOTYPE:
 					    break;
 					case EQ:
+					case NEQ:
+					case AND:
+					case OR:
+					case INVERSION:
 					case '+':
 					case '-':
 					case '*':
@@ -168,6 +186,13 @@ Token* get_dominant_operator(Token *p,Token *q){
 	                t2++;
 		    } 
 		    if(t2==(t+1)||(*t2).type!=')'){
+			if((*q).type=='+' || (*q).type=='-'){
+		            position=q-p;
+			    break;
+			}else{
+			    if(position==-1) position=q-p;
+			}
+			    /*
 		        if((*q).type=='+'||(*q).type=='-'){
 			    while(q>p&&(q-1)[0].type=='-'){
 				q--;
@@ -177,11 +202,12 @@ Token* get_dominant_operator(Token *p,Token *q){
 			    }else position=q-p-1;
 			    break;
 			}else if(position==-1) position=q-p;
+			*/
 		    }
 		}
             q--;
 	}	
-        if(position==-1) assert(0);
+       // if(position==-1) assert(0);
 	printf("dom:%d\n",p[position].type);
 	return p+position;
 }
@@ -226,6 +252,13 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 	/* TODO: Insert codes to evaluate the expression. */
+	int i;
+	for(i=0;i<nr_token;i++){
+		if(tokens[i].type=='-'){
+		    if(!(i>0 && tokens[i-1].type==NUM))
+		        tokens[i].type=NEGATIVE;
+		}
+	}
 	int v=eval(tokens,tokens+nr_token-1);
 	printf("ans:%d\n",v);
 	return v;
