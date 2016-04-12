@@ -7,13 +7,13 @@
 #include <regex.h>
 #include <stdlib.h>
 
+#include <ctype.h>
 enum {
 	NOTYPE = 256,
        	EQ = 257,
 	NEQ = 258,
 	AND = 259,
         OR = 260,
-	INVERSION = 261,
 	POINTER = 262,
 	NEGATIVE = 263,
         NUM = 10,
@@ -42,10 +42,10 @@ static struct rule {
 	{"!=", NEQ},
 	{"&&", AND},
 	{"\\|\\|", OR},
-	{"!", INVERSION},
+	{"\\!", '!'},
 	{"0x[0-9 a-f A-F]+",NUM},
 	{"[0-9]+",NUM},
-	{"\\$",REGISTER}
+	{"\\$[e E](([a-d A-D][x X])|([b B s S][p P])|([s S d D][i I]))",REGISTER}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -107,7 +107,7 @@ static bool make_token(char *e) {
 					case NEQ:
 					case AND:
 					case OR:
-					case INVERSION:
+					case '!':
 					case '+':
 					case '-':
 					case '*':
@@ -118,6 +118,7 @@ static bool make_token(char *e) {
 				            nr_token++;
 					    break;	
 					case NUM:
+					case REGISTER:
 					    tokens[nr_token].type=rules[i].token_type;  
 					    sprintf(tokens[nr_token].str,"%.*s",substr_len,substr_start);
 
@@ -177,47 +178,93 @@ bool check_parentheses(Token *p,Token *q){
 	return true;
 }
 Token* get_dominant_operator(Token *p,Token *q){
-	Token *t=q;
+	Token *t=p;
 	int position=-1;
-        while(q>=p){
-	        if((*q).type=='+'||(*q).type=='-'||(*q).type=='*'||(*q).type=='/'){
-		    Token *t2=q+1;
-                    while(t2<=t&&(*t2).type!='('&&(*t2).type!=')'){
-	                t2++;
-		    } 
-		    if(t2==(t+1)||(*t2).type!=')'){
-			if((*q).type=='+' || (*q).type=='-'){
-		            position=q-p;
-			    break;
-			}else{
-			    if(position==-1) position=q-p;
-			}
-			    /*
-		        if((*q).type=='+'||(*q).type=='-'){
-			    while(q>p&&(q-1)[0].type=='-'){
-				q--;
-			    }
-			    if(q==p||(q-1)[0].type==')'||(q-1)[0].type==NUM){
-                                position=q-p;
-			    }else position=q-p-1;
-			    break;
-			}else if(position==-1) position=q-p;
-			*/
-		    }
+	int in_brackets=0;
+        while(p<=q){
+		switch((*p).type){
+		    case NUM:
+	            case NEGATIVE:
+	            case POINTER:
+			break;
+	            case '(':
+		        in_brackets++;	
+			break;
+	            case ')':
+			in_brackets--;
+			assert(in_brackets>=0);
+			break;
+		    case OR:	
+			if(!in_brackets)
+			    position=p-t;
+			break;
+		    case AND:
+			if(!in_brackets && 
+			  (position==-1||t[position].type!=OR))
+			   position=p-t; 
+			break;
+		    case EQ:
+		    case NEQ:
+			if(!in_brackets &&
+			  (position==-1||(t[position].type!=OR &&
+					 t[position].type!=AND)))
+			    position=p-t;
+		        break;	
+		    case '+':
+		    case '-':
+			if(!in_brackets && 
+			  (position==-1||(t[position].type!=OR &&
+					 t[position].type!=AND &&
+					 t[position].type!=EQ &&
+					 t[position].type!=NEQ)))
+			    position=p-t;
+			break;
+		    case '*':
+		    case '/':
+			if(!in_brackets && 
+			  (position==-1||(t[position].type!=OR &&
+					 t[position].type!=AND &&
+					 t[position].type!=EQ &&
+					 t[position].type!=NEQ &&
+					 t[position].type!='+' &&
+					 t[position].type!='-')))
+			    position=p-t;
+			break;
 		}
-            q--;
+		p++;
 	}	
-       // if(position==-1) assert(0);
-	printf("dom:%d\n",p[position].type);
-	return p+position;
+	printf("domposition:%d\n",position);
+	//getchar();
+	printf("dom:%d\n",t[position].type);
+	return t+position;
 }
 uint32_t eval(Token *p,Token *q){
 	if(p>q){
 		assert(0);
 	}
 	else if(p==q){
-		assert((*p).type==NUM);
-		return (strtol((*p).str,NULL,0));
+		assert((*p).type==NUM||(*p).type==REGISTER);
+		if ((*p).type==NUM)
+			return (strtol((*p).str,NULL,0));
+		else {
+			char reg[32];
+			int i=0;
+			while((p[0].str[i]!='\0')){
+			    reg[i]=tolower(p[0].str[i]);
+			    i++;	
+			    }
+			reg[i]='\0';
+			//printf("%s\n",reg);
+			if(strcmp(reg,"$eax")==0) return cpu.eax;
+			else if(strcmp(reg,"$ebx")==0) return cpu.ebx;
+			else if(strcmp(reg,"$ecx")==0) return cpu.ecx;
+			else if(strcmp(reg,"$edx")==0) return cpu.edx;
+			else if(strcmp(reg,"$ebp")==0) return cpu.ebp;
+			else if(strcmp(reg,"$esp")==0) return cpu.esp;
+			else if(strcmp(reg,"$edi")==0) return cpu.edi;
+			else if(strcmp(reg,"$esi")==0) return cpu.esi;
+			assert(0);
+		}
 	}
 	else if(check_parentheses(p,q)==true){
 //		printf("parenthese true\n");
@@ -238,10 +285,20 @@ uint32_t eval(Token *p,Token *q){
 	                case '/': 
 			    assert(val2);
 	                    return val1/val2;
+			case AND: return val1 && val2;
+	                case OR: return val1 || val2;
+		        case EQ: return val1 == val2;
+	                case NEQ: return val1 != val2;
                         default: assert(0);
 		    }
 		}else {
-		    return -1*(eval(p+1,q));
+			    //printf("op:%d",op[0].type);
+		    switch(p[0].type){
+			case '!': return !eval(p+1,q);
+		        case NEGATIVE: return -1*eval(p+1,q);
+			case POINTER: return swaddr_read(eval(p+1,q),1);
+			default:assert(0);
+		    }
 		}
 
 	}
@@ -255,12 +312,17 @@ uint32_t expr(char *e, bool *success) {
 	int i;
 	for(i=0;i<nr_token;i++){
 		if(tokens[i].type=='-'){
-		    if(!(i>0 && tokens[i-1].type==NUM))
+		    if(!(i>0 && (tokens[i-1].type==NUM||
+		                 tokens[i-1].type==')')))
 		        tokens[i].type=NEGATIVE;
+		}else if (tokens[i].type=='*'){
+		    if(!(i>0 && (tokens[i-1].type==NUM||
+				  tokens[i-1].type==')')))
+			tokens[i].type=POINTER;
 		}
 	}
 	int v=eval(tokens,tokens+nr_token-1);
-	printf("ans:%d\n",v);
+	printf("ans:%d %x\n",v,v);
 	return v;
 	//panic("please implement me");
 //	return 0;
