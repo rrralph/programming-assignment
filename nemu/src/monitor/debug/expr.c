@@ -45,7 +45,7 @@ static struct rule {
 	{"\\!", '!'},
 	{"0x[0-9 a-f A-F]+",NUM},
 	{"[0-9]+",NUM},
-	{"\\$[e E](([a-d A-D][x X])|([b B s S][p P])|([s S d D][i I]))",REGISTER}
+	{"\\$[e E](([a-d A-D][x X])|([b B s S][p P])|([s S d D][i I])|([i I][p P]))",REGISTER}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -92,7 +92,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+			//	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -269,6 +269,7 @@ uint32_t eval(Token *p,Token *q){
 			else if(strcmp(reg,"$esp")==0) return cpu.esp;
 			else if(strcmp(reg,"$edi")==0) return cpu.edi;
 			else if(strcmp(reg,"$esi")==0) return cpu.esi;
+			else if(strcmp(reg,"$eip")==0) return cpu.eip;
 			assert(0);
 		}
 	}
@@ -319,16 +320,16 @@ uint32_t expr(char *e, bool *success) {
 	for(i=0;i<nr_token;i++){
 		if(tokens[i].type=='-'){
 		    if(!(i>0 && (tokens[i-1].type==NUM||
-		                 tokens[i-1].type==')')))
+		                 tokens[i-1].type==')'||tokens[i-1].type==REGISTER)))
 		        tokens[i].type=NEGATIVE;
 		}else if (tokens[i].type=='*'){
 		    if(!(i>0 && (tokens[i-1].type==NUM||
-				  tokens[i-1].type==')')))
+				 tokens[i-1].type==')'||tokens[i-1].type==REGISTER)))
 			tokens[i].type=POINTER;
 		}
 	}
 	int v=eval(tokens,tokens+nr_token-1);
-	printf("ans:%d 0x%x\n",v,v);
+//	printf("ans:%d 0x%x\n",v,v);
 	return v;
 	//panic("please implement me");
 //	return 0;

@@ -61,6 +61,10 @@ static int cmd_si(char *args) {
 	return 0;	
 }
 static int cmd_info(char *args) {
+	if(args==NULL){
+		printf("lacking args!\n");
+		return 0;
+	}
 	char *des=strtok(args," ");
 	if(*des=='r'){
 		printf("eax: 0x%x    %d\n",cpu.eax,cpu.eax);
@@ -73,7 +77,7 @@ static int cmd_info(char *args) {
 		printf("edi: 0x%x    %d\n",cpu.edi,cpu.edi);
 		printf("eip: 0x%x    %d\n",cpu.eip,cpu.eip);
 	}else if(*des=='w'){
-		printf("watch \n");
+		print_watchpoints();
 	}else printf("Invalid args!\n");
 	return 0;
 }
@@ -119,10 +123,35 @@ static int cmd_x(char *args){
 	return 0;
 }
 static int cmd_p(char *args){
-	printf("%s\n",args);
+	//printf("%s\n",args);
 	bool s=true;
 	expr(args,&s);
 
+	return 0;
+}
+static int cmd_w(char *args){
+	if(args==NULL){
+		printf("lacking args!\n");
+		return 0;
+	}
+	bool s=true;
+	int v=expr(args,&s);
+	if(s){
+		WP* p=new_wp();
+		strcpy(p->str,args);	
+		printf("Watchpoint %d: %s\n",p->NO,p->str);
+		p->value=v;
+	}else{
+		printf("unvalid expr!\n");
+	}
+	//printf("%s\n",p->str);
+	return 0;
+
+}
+static int cmd_d(char *args){
+	int no=strtol(args,NULL,0);		
+	WP* p=get_wp_fromno(no);
+	free_wp(p);
 	return 0;
 }
 static struct {
@@ -136,7 +165,9 @@ static struct {
         { "si", "Step one instruction exactly", cmd_si },
 	{ "info", "Info r lists all the registers and their contents, Info w lists all the watchpoints", cmd_info },
 	{ "x", "Examine memory N 4 bytes", cmd_x },
-	{ "p", "Evaluate EXPR",cmd_p }
+	{ "p", "Evaluate EXPR",cmd_p },
+	{ "w", "Set watchpoint",cmd_w},
+	{ "d", "Delete watchpoint N",cmd_d}
 	/* TODO: Add more commands */
 
 };
