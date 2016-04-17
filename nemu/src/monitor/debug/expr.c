@@ -178,8 +178,16 @@ bool check_parentheses(Token *p,Token *q){
 	return true;
 }
 Token* get_dominant_operator(Token *p,Token *q){
+/* 
+ * '*'=21 '/'=21 
+ * '+'=22 '-'=22
+ * EQ=25 NEQ=25	
+ * AND=30 
+ * OR=31
+ * */
 	Token *t=p;
 	int position=-1;
+	int priority=0;
 	int in_brackets=0;
         while(p<=q){
 		switch((*p).type){
@@ -195,47 +203,45 @@ Token* get_dominant_operator(Token *p,Token *q){
 			assert(in_brackets>=0);
 			break;
 		    case OR:	
-			if(!in_brackets)
+			if(!in_brackets && 31>= priority){
 			    position=p-t;
+		            priority=31;
+			}
 			break;
 		    case AND:
-			if(!in_brackets && 
-			  (position==-1||t[position].type!=OR))
-			   position=p-t; 
+			if(!in_brackets && 30>=priority){
+			   position=p-t;
+			   priority=30;
+			} 
+
 			break;
 		    case EQ:
 		    case NEQ:
-			if(!in_brackets &&
-			  (position==-1||(t[position].type!=OR &&
-					 t[position].type!=AND)))
+			if(!in_brackets && 25>=priority){
 			    position=p-t;
+			    priority=25;
+			}
 		        break;	
 		    case '+':
 		    case '-':
-			if(!in_brackets && 
-			  (position==-1||(t[position].type!=OR &&
-					 t[position].type!=AND &&
-					 t[position].type!=EQ &&
-					 t[position].type!=NEQ)))
+			if(!in_brackets && 22>=priority){
 			    position=p-t;
+			    priority=22;
+			}
 			break;
 		    case '*':
 		    case '/':
-			if(!in_brackets && 
-			  (position==-1||(t[position].type!=OR &&
-					 t[position].type!=AND &&
-					 t[position].type!=EQ &&
-					 t[position].type!=NEQ &&
-					 t[position].type!='+' &&
-					 t[position].type!='-')))
+			if(!in_brackets && 21>=priority){
 			    position=p-t;
+			    priority=21;
+			}
 			break;
 		}
 		p++;
 	}	
-	printf("domposition:%d\n",position);
+	//printf("domposition:%d\n",position);
 	//getchar();
-	printf("dom:%d\n",t[position].type);
+	//printf("dom:%d\n",t[position].type);
 	return t+position;
 }
 uint32_t eval(Token *p,Token *q){
@@ -322,7 +328,7 @@ uint32_t expr(char *e, bool *success) {
 		}
 	}
 	int v=eval(tokens,tokens+nr_token-1);
-	printf("ans:%d %x\n",v,v);
+	printf("ans:%d 0x%x\n",v,v);
 	return v;
 	//panic("please implement me");
 //	return 0;
