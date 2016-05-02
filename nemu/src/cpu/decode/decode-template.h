@@ -22,6 +22,7 @@ make_helper(concat(decode_i_, SUFFIX)) {
 }
 
 #if DATA_BYTE == 1 || DATA_BYTE == 4
+
 /* sign immediate */
 make_helper(concat(decode_si_, SUFFIX)) {
 	op_src->type = OP_TYPE_IMM;
@@ -32,7 +33,13 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 *
 	op_src->simm = ???
 	 */
-	panic("please implement me");
+	uint32_t temp= instr_fetch(eip,DATA_BYTE);
+	if(MSB(temp)==1)
+		op_src->simm=-1*(((-1)-temp)+1);
+	else
+		op_src->simm=temp;
+//	panic("please implement me");
+
 
 	op_src->val = op_src->simm;
 
