@@ -89,4 +89,13 @@ void restart() {
 
 	/* Initialize DRAM. */
 	init_ddr3();
+	
+	/*Initialize EFLAGS. */
+	cpu.eflags.CF=0;
+	cpu.eflags.PF=0;
+	cpu.eflags.ZF=1;
+	cpu.eflags.SF=0;
+	cpu.eflags.IF=1;
+	cpu.eflags.DF=0;
+	cpu.eflags.OF=0;
 }

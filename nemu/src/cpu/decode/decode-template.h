@@ -142,7 +142,6 @@ make_helper(concat(decode_si2rm_, SUFFIX)) {
 	len += decode_si_b(eip + len);
 	return len;
 }
-
 make_helper(concat(decode_si_rm2r_, SUFFIX)) {
 	int len = decode_rm_internal(eip, op_src2, op_dest);
 	len += decode_si_b(eip + len);

@@ -125,9 +125,9 @@ static int cmd_x(char *args){
 static int cmd_p(char *args){
 	//printf("%s\n",args);
 	bool s=true;
-	expr(args,&s);
-
-	return 0;
+	int ans=expr(args,&s);
+	printf("%d\n",ans);
+	return ans;
 }
 static int cmd_w(char *args){
 	if(args==NULL){
