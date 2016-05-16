@@ -2,11 +2,23 @@
 
 
 #define DATA_BYTE 2
-#include "call-template.h"
+#include "test-template.h"
 #undef DATA_BYTE
 
 #define DATA_BYTE 4
-#include "call-template.h"
+#include "test-template.h"
 #undef DATA_BYTE
 
-make_helper_v(call_i);
+
+make_helper_v(test_r2rm);
+
+
+
+
+
+
+
+
+
+
+

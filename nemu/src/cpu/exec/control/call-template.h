@@ -12,7 +12,7 @@ static void do_execute(){
 #endif
 	print_asm_template1();
 }
-make_instr_helper(r);
+make_instr_helper(i);
 
 
 
