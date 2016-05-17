@@ -8,7 +8,7 @@ static void do_execute(){
 	cpu.eflags.CF=0;
 	update_PZS_eflags();
 	
-	print_asm_template2();
+	print_asm(str(instr) " %s,%s",op_src->str,op_dest->str);
 
 }
 
