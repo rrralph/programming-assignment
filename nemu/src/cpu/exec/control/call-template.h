@@ -1,14 +1,13 @@
-#include "cpu/exec/template-start.h"
-
+#include "cpu/exec/template-start.h" 
 #define instr call
 
 static void do_execute(){
-	cpu.esp-=4;
-	MEM_W(cpu.esp,cpu.eip);
+	cpu.esp-=DATA_BYTE;
+	cpu.esp=cpu.eip;
 
 	cpu.eip+=op_src->val;
 #if DATA_BYTE==2
-	cpu.eip&=0x0000FFF;
+	cpu.eip&=0x0000FFFF;
 #endif
 	print_asm(str(instr) " 0x%x",cpu.eip+DATA_BYTE+1);
 }

@@ -9,19 +9,11 @@ static void do_execute(){
 		cpu.eflags.CF=1;
 	}
 
-	if(result==0)
-		cpu.eflags.ZF=1;
-	cpu.eflags.SF=MSB(result);
-
 	if(MSB(op_dest->val)^MSB(op_src->val) &&
 	   MSB(op_dest->val)^MSB(result))
 		cpu.eflags.OF=1;
-	uint8_t cnum=(uint8_t)11111111&result;
-	cnum=(cnum&0x55)+((cnum>>1)&0x55);
-	cnum=(cnum&0x33)+((cnum>>2)&0x33);
-	cnum=(cnum&0x0f)+((cnum>>4)&0x0f);	
-	if(cnum % 2!=0)
-		cpu.eflags.PF=1;
+
+	update_PZS_eflags();
 
 
 	print_asm_template2();
@@ -31,5 +23,7 @@ static void do_execute(){
 make_instr_helper(si2rm);
 #endif
 make_instr_helper(i2rm);
+make_instr_helper(rm2r);
+make_instr_helper(r2rm);
 
 #include "cpu/exec/template-end.h"
