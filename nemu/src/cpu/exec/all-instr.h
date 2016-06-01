@@ -5,6 +5,7 @@
 
 #include "data-mov/push.h"
 #include "data-mov/pop.h"
+#include "data-mov/movsx.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
@@ -35,3 +36,4 @@
 
 #include "control/call.h"
 #include "control/jcc.h"
+#include "control/leave.h"
