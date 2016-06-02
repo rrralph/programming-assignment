@@ -6,6 +6,8 @@
 #include "data-mov/push.h"
 #include "data-mov/pop.h"
 #include "data-mov/movsx.h"
+#include "data-mov/movzx.h"
+#include "data-mov/cwtl.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
@@ -17,6 +19,8 @@
 
 #include "arith/sub.h"
 #include "arith/cmp.h"
+#include "arith/add.h"
+#include "arith/adc.h"
 
 #include "logic/and.h"
 #include "logic/or.h"
