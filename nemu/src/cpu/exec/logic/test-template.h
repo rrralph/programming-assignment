@@ -3,7 +3,7 @@
 #define instr test
 
 static void do_execute(){
-	DATA_TYPE result=(op_src->val & op_dest->val);
+	DATA_TYPE_S result=(op_src->val & op_dest->val);
 	cpu.eflags.OF=0;
 	cpu.eflags.CF=0;
 	update_PZS_eflags();

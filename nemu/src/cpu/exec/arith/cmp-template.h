@@ -3,17 +3,25 @@
 #define instr cmp
 
 static void do_execute(){
-	DATA_TYPE result=op_dest->val-op_src->val;
+	DATA_TYPE_S result=op_dest->val-op_src->val;
+
+	update_PZS_eflags();
+	if((op_dest->val&0x7)<(op_src->val&0x7))
+		cpu.eflags.AF=1;
+	else
+		cpu.eflags.AF=0;
 
 	if(op_dest->val<op_src->val){
 		cpu.eflags.CF=1;
-	}
+	}else
+		cpu.eflags.CF=0;
 
 	if(MSB(op_dest->val)^MSB(op_src->val) &&
 	   MSB(op_dest->val)^MSB(result))
 		cpu.eflags.OF=1;
+	else
+		cpu.eflags.OF=0;
 
-	update_PZS_eflags();
 
 
 	print_asm_template2();

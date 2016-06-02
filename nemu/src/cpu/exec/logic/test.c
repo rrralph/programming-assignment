@@ -17,8 +17,6 @@
 make_helper_v(test_r2rm);
 make_helper_v(test_i2rm);
 
-make_helper(test_r2rm_b);
-make_helper(test_i2rm_b);
 
 
 
