@@ -1,12 +1,12 @@
 #include "cpu/exec/template-start.h"
 
-#define instr sub
+#define instr sbb
 
 static void do_execute() {
-	DATA_TYPE_S result = op_dest->val - op_src->val;
+	DATA_TYPE_S result = op_dest->val - op_src->val-cpu.eflags.CF;
 
 	update_PZS_eflags();
-	if((op_dest->val&0x7)<(op_src->val&0x7))
+	if((op_dest->val&0x7)<((op_src->val&0x7)+cpu.eflags.CF))
 		cpu.eflags.CF=1;
 	else
 		cpu.eflags.CF=0;
@@ -17,7 +17,7 @@ static void do_execute() {
  	else
 		cpu.eflags.OF=0;
 
-	if(op_dest->val<op_src->val)
+	if(op_dest->val<(op_src->val+cpu.eflags.CF))
 		cpu.eflags.CF=1;
 	else
 		cpu.eflags.CF=0;
