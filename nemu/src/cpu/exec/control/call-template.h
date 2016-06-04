@@ -3,7 +3,7 @@
 
 static void do_execute(){
 	cpu.esp-=DATA_BYTE;
-	MEM_W(cpu.esp,cpu.eip);
+	MEM_W(cpu.esp,cpu.eip+DATA_BYTE);
 	if(op_src->type==OP_TYPE_IMM){
 
 	cpu.eip+=(DATA_TYPE_S)op_src->val;

@@ -15,10 +15,10 @@
 #endif
 
 #define update_eip() \
-	cpu.eip=cpu.eip+op_src->val;\
+	cpu.eip+=(DATA_TYPE_S)op_src->val;\
 	if (DATA_BYTE==2)\
 		cpu.eip=cpu.eip &0x0000ffff;\
-	print_asm(str(instr) " 0x%x", cpu.eip+EIP_OFF);
+	print_asm(str(instr) " 0x%x 0x%x", cpu.eip+EIP_OFF,op_src->val);
 
 #define instr ja
 static void do_execute(){
@@ -132,7 +132,7 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jle
 static void do_execute(){
-	if(cpu.eflags.ZF==1 && cpu.eflags.SF!=cpu.eflags.OF){
+	if(cpu.eflags.ZF==1 || cpu.eflags.SF!=cpu.eflags.OF){
 		update_eip();
 	}
 }

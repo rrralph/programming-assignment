@@ -2,6 +2,20 @@
 
 #define instr jmp
 
+#if DATA_BYTE ==1 
+#define CODE_LEN 2
+#endif
+
+#if DATA_BYTE ==2
+#undef CODE_LEN
+#define CODE_LEN 3
+#endif
+
+#if DATA_BYTE==4
+#undef CODE_LEN
+#define CODE_LEN 5
+#endif
+
 static void do_execute(){
 
 	if(op_src->type==OP_TYPE_IMM){
@@ -15,7 +29,7 @@ static void do_execute(){
 		}else
 			cpu.eip=op_src->val;
 	}
-	print_asm(str(instr) " %s",op_src->str);
+	print_asm(str(instr) " 0x%x",cpu.eip+CODE_LEN);
 }
 make_instr_helper(i);
 #if DATA_BYTE==2||DATA_BYTE==4

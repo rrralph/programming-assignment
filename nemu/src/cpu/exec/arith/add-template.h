@@ -8,7 +8,6 @@ static void do_execute(){
         cpu.eflags.OF=1;
     else
         cpu.eflags.OF=0;
-    //低三位相加向第四位进位，则AF =1
     if(((op_src->val&0x7)+(op_dest->val&0x7))>>3)
         cpu.eflags.AF=1;
     else 

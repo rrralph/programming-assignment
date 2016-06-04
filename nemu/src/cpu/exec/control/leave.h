@@ -9,8 +9,8 @@
 make_helper(leave){
 	cpu.esp=cpu.ebp;
 	cpu.ebp=MEM_R(cpu.esp);
-	cpu.esp+=4;
-	print_asm(str(instr));
+	cpu.esp+=DATA_BYTE;
+	print_asm(str(instr) " 0x%x",MEM_R(cpu.esp-4));
 	return 1;
 }
 

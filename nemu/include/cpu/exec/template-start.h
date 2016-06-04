@@ -35,7 +35,7 @@
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
 
 #define update_PZS_eflags()\
-	cpu.eflags.ZF=!result;\
+	cpu.eflags.ZF=(!result);\
 	cpu.eflags.SF=MSB(result);\
 	cpu.eflags.PF=1;\
 	int i=0;\

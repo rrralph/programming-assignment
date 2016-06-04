@@ -3,9 +3,10 @@
 #define instr cmp
 
 static void do_execute(){
-	DATA_TYPE_S result=op_dest->val-op_src->val;
+	DATA_TYPE_S result=op_dest->val - op_src->val;
 
 	update_PZS_eflags();
+
 	if((op_dest->val&0x7)<(op_src->val&0x7))
 		cpu.eflags.AF=1;
 	else
@@ -21,7 +22,6 @@ static void do_execute(){
 		cpu.eflags.OF=1;
 	else
 		cpu.eflags.OF=0;
-
 
 
 	print_asm_template2();

@@ -3,13 +3,13 @@
 #define instr sub
 
 static void do_execute() {
-	DATA_TYPE_S result = op_dest->val - op_src->val;
+	DATA_TYPE result =op_dest->val - op_src->val;
 
 	update_PZS_eflags();
 	if((op_dest->val&0x7)<(op_src->val&0x7))
-		cpu.eflags.CF=1;
+		cpu.eflags.AF=1;
 	else
-		cpu.eflags.CF=0;
+		cpu.eflags.AF=0;
 
 	if(MSB(op_dest->val)^MSB(op_src->val) &&
 	   MSB(op_dest->val)^MSB(result))
@@ -23,6 +23,7 @@ static void do_execute() {
 		cpu.eflags.CF=0;
 		
 	OPERAND_W(op_dest, result);
+	//print_asm(str(instr) " %x",result);
 	print_asm_template2();
 }
 #if DATA_BYTE == 2 || DATA_BYTE==4
