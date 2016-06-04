@@ -33,11 +33,9 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 *
 	op_src->simm = ???
 	 */
-	uint32_t temp= instr_fetch(eip,DATA_BYTE);
-	if(MSB(temp)==1)
-		op_src->simm=-1*(((-1)-temp)+1);
-	else
-		op_src->simm=temp;
+	op_src->simm=instr_fetch(eip,DATA_BYTE);
+	op_src->simm<<=(32-(DATA_BYTE<<3));
+	op_src->simm>>=(32-(DATA_BYTE<<3));
 //	panic("please implement me");
 
 
