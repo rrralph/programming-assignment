@@ -7,8 +7,15 @@ static void do_execute () {
 	OPERAND_W(op_src, result);
 
 	/* TODO: Update EFLAGS. */
-	panic("please implement me");
-
+	update_PZS_eflags();
+	if((op_src->val&0x7)>0)
+		cpu.eflags.AF=1;
+	else
+		cpu.eflags.AF=0;
+	if(MSB(op_src->val)&&(!MSB(result)))
+		cpu.eflags.OF=1;
+	else
+		cpu.eflags.OF=0;
 	print_asm_template1();
 }
 
