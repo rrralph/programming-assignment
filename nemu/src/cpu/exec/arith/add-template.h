@@ -12,8 +12,7 @@ static void do_execute(){
         cpu.eflags.AF=1;
     else 
         cpu.eflags.AF=0;
-    long long result2=(long long )op_src->val+(long long )op_dest->val;
-    if(result2>>DATA_BYTE*4)
+    if(result<op_src->val)
         cpu.eflags.CF=1;
     else 
         cpu.eflags.CF=0;

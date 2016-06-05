@@ -16,4 +16,3 @@ make_helper_v(push_r);		//50 + /r
 make_helper_v(push_rm);		//FF   /6	
 make_helper_v(push_i);		//68	
 
-make_helper(push_i_b);		//6A

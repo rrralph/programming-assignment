@@ -2,8 +2,10 @@
 
 #define instr movsx
 static void do_execute(){
-	DATA_TYPE_S result=op_src->val;
-	OPERAND_W(op_dest,result);
+	int result;
+	result=op_src->val<<(32-(DATA_BYTE<<3));
+	result>>=(32-(DATA_BYTE<<3));
+	write_operand_l(op_dest,result);
 	print_asm_template2();
 }
 

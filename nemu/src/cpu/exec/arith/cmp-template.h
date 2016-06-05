@@ -3,7 +3,7 @@
 #define instr cmp
 
 static void do_execute(){
-	DATA_TYPE_S result=op_dest->val - op_src->val;
+	DATA_TYPE result=op_dest->val - op_src->val;
 
 	update_PZS_eflags();
 
@@ -22,7 +22,6 @@ static void do_execute(){
 		cpu.eflags.OF=1;
 	else
 		cpu.eflags.OF=0;
-
 
 	print_asm_template2();
 

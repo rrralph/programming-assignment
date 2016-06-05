@@ -6,10 +6,12 @@
 int cwtl(){
     if(ops_decoded.is_data_size_16){
         (cpu.eax<<16)<0?(cpu.edx= 0x0000ffff): (cpu.edx=0);
+    	print_asm("cwtl");    
     }else{
         (cpu.eax<0)? (cpu.edx=0xffffffff): (cpu.edx=0);
+	print_asm("cltd");
     }
-    print_asm_template1();    
+    
     return 1;
 }
 

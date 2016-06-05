@@ -15,24 +15,29 @@
 #endif
 
 #define update_eip() \
-	cpu.eip+=(DATA_TYPE_S)op_src->val;\
+	int temp=op_src->val<<(32-(DATA_BYTE<<3));\
+	temp>>=(32-(DATA_BYTE<<3));\
+	int new_eip=cpu.eip+temp;\
 	if (DATA_BYTE==2)\
-		cpu.eip=cpu.eip &0x0000ffff;\
-	print_asm(str(instr) " 0x%x 0x%x", cpu.eip+EIP_OFF,op_src->val);
+		new_eip&=0x0000ffff;\
+	print_asm(str(instr) " 0x%x 0x%x", new_eip+EIP_OFF,op_src->val);
 
 #define instr ja
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.CF==0 && cpu.eflags.ZF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
+
 }
 make_instr_helper(i);
 #undef instr
 //------------------------------------------------------
 #define instr jae
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.CF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -40,8 +45,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jb
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.CF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -49,8 +55,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jbe
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==1 || cpu.eflags.CF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -58,8 +65,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jc
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.CF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -67,8 +75,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jcxz
 static void do_execute(){
+	update_eip();
 	if((cpu.ecx&0xffff)==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -77,8 +86,9 @@ make_instr_helper(i);
 #if DATA_BYTE ==1
 #define instr jecxz
 static void do_execute(){
+	update_eip();
 	if(cpu.ecx==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -87,8 +97,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr je
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -96,8 +107,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jz
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -105,8 +117,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jg
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==0 && cpu.eflags.SF==cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -114,8 +127,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jge
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.SF==cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -123,8 +137,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jl
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.SF!=cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -132,8 +147,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jle
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==1 || cpu.eflags.SF!=cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -141,8 +157,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jna
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==1 && cpu.eflags.CF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -150,8 +167,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnae
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.CF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -159,8 +177,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnb
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.CF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -168,8 +187,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnbe
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==0 && cpu.eflags.CF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -177,8 +197,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnc
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.CF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -186,8 +207,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jne
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -195,8 +217,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jng
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==1 && cpu.eflags.SF!=cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -204,8 +227,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnge
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.SF!=cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -213,8 +237,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnl
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.SF==cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -222,8 +247,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnle
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==0 && cpu.eflags.SF==cpu.eflags.OF){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -231,8 +257,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jno
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.OF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -240,8 +267,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnp
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.PF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -249,8 +277,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jns
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.SF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -258,8 +287,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jnz
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.ZF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -267,8 +297,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jo
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.OF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -276,8 +307,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jp
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.PF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -285,8 +317,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jpe
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.PF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -294,8 +327,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr jpo
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.PF==0){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
@@ -303,8 +337,9 @@ make_instr_helper(i);
 //------------------------------------------------------
 #define instr js
 static void do_execute(){
+	update_eip();
 	if(cpu.eflags.SF==1){
-		update_eip();
+		cpu.eip=new_eip;
 	}
 }
 make_instr_helper(i);
