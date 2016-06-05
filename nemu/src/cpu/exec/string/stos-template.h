@@ -10,7 +10,7 @@ make_helper(concat3(instr,_,SUFFIX)){
 	else if(DATA_BYTE==2){
 		src&=0x0000ffff;
 	}
-	MEM_W(MEM_R(cpu.edi),src);
+	MEM_W(cpu.edi,src);
 	if(cpu.eflags.DF==0){
 		cpu.edi+=DATA_BYTE;
 	}else

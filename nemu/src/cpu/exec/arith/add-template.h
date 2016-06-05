@@ -2,9 +2,9 @@
 
 #define instr add
 static void do_execute(){
-    DATA_TYPE_S result=op_src->val+op_dest->val;
+    DATA_TYPE result=op_src->val+op_dest->val;
     update_PZS_eflags();
-    if(MSB(result)!=MSB(op_src->val)&&MSB(result)!=MSB(op_dest->val))
+    if(MSB(result)!=MSB(op_src->val)&&MSB(op_src->val)!=MSB(op_dest->val))
         cpu.eflags.OF=1;
     else
         cpu.eflags.OF=0;

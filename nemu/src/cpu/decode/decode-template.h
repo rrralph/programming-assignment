@@ -189,4 +189,28 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	else { assert(0); }
 }
 
+make_helper(concat(decode_rm_b2r_,SUFFIX)){
+	Operand *rm=op_src;
+	Operand *reg=op_dest;
+	rm->size=1;
+	int len=read_ModR_M(eip,rm,reg);
+	reg->val=REG(reg->reg);
+#ifdef DEBUG
+	snprintf(reg->str,OP_STR_SIZE,"%%%s",REG_NAME(reg->reg));
+#endif
+	return len;
+}
+
+make_helper(concat(decode_rm_w2r_,SUFFIX)){
+	Operand *rm=op_src;
+	Operand *reg=op_dest;
+	rm->size=2;
+	int len=read_ModR_M(eip,rm,reg);
+	reg->val=REG(reg->reg);
+#ifdef DEBUG
+	snprintf(reg->str,OP_STR_SIZE,"%%%s",REG_NAME(reg->reg));
+#endif
+	return len;
+}
+
 #include "cpu/exec/template-end.h"
