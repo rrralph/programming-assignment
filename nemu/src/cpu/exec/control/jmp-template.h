@@ -25,9 +25,9 @@ static void do_execute(){
 #endif
 	}else{
 		if(DATA_BYTE == 2){
-			cpu.eip=op_src->val&0x0000ffff;
+			cpu.eip=(op_src->val&0x0000ffff)-2;
 		}else
-			cpu.eip=op_src->val;
+			cpu.eip=op_src->val-2;
 	}
 	print_asm(str(instr) " 0x%x",cpu.eip+CODE_LEN);
 }

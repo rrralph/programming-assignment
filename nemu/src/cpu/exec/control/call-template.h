@@ -17,7 +17,7 @@ static void do_execute(){
 			cpu.eip=op_src->val;
 	}
 
-	print_asm(str(instr) " 0x%x",cpu.eip+DATA_BYTE);
+	print_asm(str(instr) " 0x%x",cpu.eip+DATA_BYTE+1);
 }
 make_instr_helper(i);
 make_instr_helper(rm);
