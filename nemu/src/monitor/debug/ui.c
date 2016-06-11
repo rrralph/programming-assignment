@@ -1,6 +1,7 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
+#include "monitor/bt.h"
 #include "nemu.h"
 
 
@@ -9,6 +10,7 @@
 #include <readline/history.h>
 
 void cpu_exec(uint32_t);
+void print_fun_name(swaddr_t );
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -28,6 +30,34 @@ char* rl_gets() {
 	return line_read;
 }
 
+static int cmd_bt(char *args) {
+	PartOfStackFrame head;
+	uint32_t temp=cpu.ebp;
+	int i=1;
+	printf("#0 0x%x ",current_eip);
+	print_fun_name(current_eip);
+	printf("(0x%x ",swaddr_read(cpu.ebp+8,4));
+	printf("0x%x ",swaddr_read(cpu.ebp+12,4));
+	printf("0x%x ",swaddr_read(cpu.ebp+16,4));
+	printf("0x%x)\n",swaddr_read(cpu.ebp+20,4));
+
+	while(temp&&swaddr_read(temp,4)){
+		head.prev_ebp=swaddr_read(temp,4);		
+		head.ret_addr=swaddr_read(temp+4,4);
+		printf("#%d 0x%x ",i,head.ret_addr);	
+		print_fun_name(head.ret_addr);
+
+		printf("(0x%x ",swaddr_read(head.prev_ebp+8,4));
+		printf("0x%x ",swaddr_read(head.prev_ebp+12,4));
+		printf("0x%x ",swaddr_read(head.prev_ebp+16,4));
+		printf("0x%x)\n",swaddr_read(head.prev_ebp+20,4));
+
+		i++;
+		temp=head.prev_ebp;
+	}
+	
+	return 0;
+}
 static int cmd_c(char *args) {
 	cpu_exec(-1);
 	return 0;
@@ -167,7 +197,8 @@ static struct {
 	{ "x", "Examine memory N 4 bytes", cmd_x },
 	{ "p", "Evaluate EXPR",cmd_p },
 	{ "w", "Set watchpoint",cmd_w},
-	{ "d", "Delete watchpoint N",cmd_d}
+	{ "d", "Delete watchpoint N",cmd_d},
+	{ "bt", "print stack frame",cmd_bt}
 	/* TODO: Add more commands */
 
 };

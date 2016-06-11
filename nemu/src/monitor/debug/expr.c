@@ -244,7 +244,7 @@ Token* get_dominant_operator(Token *p,Token *q){
 			}
 			break;
 		    default:
-			assert(0);
+			break;
 		}
 		p++;
 	}	

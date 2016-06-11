@@ -9,6 +9,19 @@ static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
 
+void print_fun_name(swaddr_t eipAddr){
+	int i=0;
+	for(;i<nr_symtab_entry;i++){
+		Elf32_Sym* temp=symtab+i;
+		//printf("0x%x 0x%x\n",temp->st_value,temp->st_value+temp->st_size);
+		if(temp->st_info==18 && temp->st_value<=eipAddr && (temp->st_value+temp->st_size)>=eipAddr){
+			//func type ==18
+			printf("%s",&strtab[temp->st_name]);
+		}
+	}
+
+}
+
 uint32_t parse_variant(char *argv){
 	int i=0;
 	for(;i<nr_symtab_entry;i++){

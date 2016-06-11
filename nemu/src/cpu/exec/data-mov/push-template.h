@@ -13,7 +13,7 @@ static void do_execute(){
 		MEM_W(cpu.esp, op_src->val);	
 	}
 	//print_asm_template2();
-	print_asm(str(instr) " %s",op_src->str);
+	print_asm(str(instr) " %s 0x%x",op_src->str,op_src->val);
 
 }
 
