@@ -197,6 +197,7 @@ Token* get_dominant_operator(Token *p,Token *q){
 	int in_brackets=0;
         while(p<=q){
 		switch((*p).type){
+		    case VARIANT:
 		    case NUM:
 	            case NEGATIVE:
 	            case POINTER:
@@ -242,6 +243,8 @@ Token* get_dominant_operator(Token *p,Token *q){
 			    priority=21;
 			}
 			break;
+		    default:
+			assert(0);
 		}
 		p++;
 	}	
@@ -280,7 +283,7 @@ uint32_t eval(Token *p,Token *q){
 			assert(0);
 		}else{
 			uint32_t varAddress=parse_variant(p->str);
-			printf("%s 0x%x\n",(*p).str,varAddress);
+//			printf("%s 0x%x\n",(*p).str,varAddress);
 			if(varAddress!=0xffffffff)
 				return varAddress;
 			else	
@@ -318,7 +321,7 @@ uint32_t eval(Token *p,Token *q){
 		    switch(p[0].type){
 			case '!': return !eval(p+1,q);
 		        case NEGATIVE: return -1*eval(p+1,q);
-			case POINTER: return swaddr_read(eval(p+1,q),1);
+			case POINTER: return swaddr_read(eval(p+1,q),4);
 			default:assert(0);
 		    }
 		}
@@ -335,16 +338,16 @@ uint32_t expr(char *e, bool *success) {
 	for(i=0;i<nr_token;i++){
 		if(tokens[i].type=='-'){
 		    if(!(i>0 && (tokens[i-1].type==NUM||
-		                 tokens[i-1].type==')'||tokens[i-1].type==REGISTER)))
+		                 tokens[i-1].type==')'||tokens[i-1].type==REGISTER||tokens[i-1].type==VARIANT)))
 		        tokens[i].type=NEGATIVE;
 		}else if (tokens[i].type=='*'){
 		    if(!(i>0 && (tokens[i-1].type==NUM||
-				 tokens[i-1].type==')'||tokens[i-1].type==REGISTER)))
+				 tokens[i-1].type==')'||tokens[i-1].type==REGISTER||tokens[i-1].type==VARIANT)))
 			tokens[i].type=POINTER;
 		}
 	}
-	int v=eval(tokens,tokens+nr_token-1);
-//	printf("ans:%d 0x%x\n",v,v);
+	int32_t v=eval(tokens,tokens+nr_token-1);
+	printf("ans:%d 0x%x\n",v,v);
 	return v;
 	//panic("please implement me");
 //	return 0;

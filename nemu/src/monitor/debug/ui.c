@@ -127,7 +127,7 @@ static int cmd_p(char *args){
 	bool s=true;
 	int ans=expr(args,&s);
 	printf("%d\n",ans);
-	return ans;
+	return 0;
 }
 static int cmd_w(char *args){
 	if(args==NULL){
