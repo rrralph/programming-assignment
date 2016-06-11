@@ -8,6 +8,9 @@
 #include <stdlib.h>
 
 #include <ctype.h>
+
+uint32_t parse_variant(char *argv);
+
 enum {
 	NOTYPE = 256,
        	EQ = 257,
@@ -17,7 +20,8 @@ enum {
 	POINTER = 262,
 	NEGATIVE = 263,
         NUM = 10,
-	REGISTER=11
+	REGISTER=11,
+	VARIANT=12
 	/* TODO: Add more token types */
 
 };
@@ -43,9 +47,10 @@ static struct rule {
 	{"&&", AND},
 	{"\\|\\|", OR},
 	{"\\!", '!'},
-	{"0x[0-9 a-f A-F]+",NUM},
+	{"0x[0-9a-fA-F]+",NUM},
 	{"[0-9]+",NUM},
-	{"\\$[e E](([a-d A-D][x X])|([b B s S][p P])|([s S d D][i I])|([i I][p P]))",REGISTER}
+	{"\\$[e E](([a-d A-D][x X])|([b B s S][p P])|([s S d D][i I])|([i I][p P]))",REGISTER},
+	{"[a-zA-Z_][a-zA-Z_0-9]*", VARIANT}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -92,7 +97,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-			//	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -117,6 +122,7 @@ static bool make_token(char *e) {
 					    tokens[nr_token].type=rules[i].token_type;  
 				            nr_token++;
 					    break;	
+					case VARIANT:
 					case NUM:
 					case REGISTER:
 					    tokens[nr_token].type=rules[i].token_type;  
@@ -249,10 +255,11 @@ uint32_t eval(Token *p,Token *q){
 		assert(0);
 	}
 	else if(p==q){
-		assert((*p).type==NUM||(*p).type==REGISTER);
-		if ((*p).type==NUM)
+		assert((*p).type==NUM||(*p).type==REGISTER||(*p).type==VARIANT);
+		if ((*p).type==NUM){
 			return (strtol((*p).str,NULL,0));
-		else {
+		}
+		else if((*p).type==REGISTER){
 			char reg[32];
 			int i=0;
 			while((p[0].str[i]!='\0')){
@@ -271,6 +278,14 @@ uint32_t eval(Token *p,Token *q){
 			else if(strcmp(reg,"$esi")==0) return cpu.esi;
 			else if(strcmp(reg,"$eip")==0) return cpu.eip;
 			assert(0);
+		}else{
+			uint32_t varAddress=parse_variant(p->str);
+			printf("%s 0x%x\n",(*p).str,varAddress);
+			if(varAddress!=0xffffffff)
+				return varAddress;
+			else	
+				assert(0);
+
 		}
 	}
 	else if(check_parentheses(p,q)==true){

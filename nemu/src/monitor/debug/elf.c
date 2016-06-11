@@ -5,8 +5,20 @@
 char *exec_file = NULL;
 
 static char *strtab = NULL;
+
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
+
+uint32_t parse_variant(char *argv){
+	int i=0;
+	for(;i<nr_symtab_entry;i++){
+		Elf32_Sym* temp=symtab+i;
+		if(strcmp(strtab+temp->st_name,argv)==0){
+			return temp->st_value;
+		}
+	}
+	return -1;
+}
 
 void load_elf_tables(int argc, char *argv[]) {
 	int ret;
