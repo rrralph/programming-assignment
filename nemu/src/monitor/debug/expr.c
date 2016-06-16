@@ -303,7 +303,7 @@ uint32_t eval(Token *p,Token *q){
 		    switch(p[0].type){
 			case '!': return !eval(p+1,q);
 		        case NEGATIVE: return -1*eval(p+1,q);
-			case POINTER: return swaddr_read(eval(p+1,q),1);
+			case POINTER: return swaddr_read(eval(p+1,q),4);
 			default:assert(0);
 		    }
 		}
