@@ -101,7 +101,7 @@ static int cmd_x(char *args){
 	int cnt=bnum/4;
 	for(;i<cnt;i++)
 	{
-	    	printf("%x:  ",hwdes+i*16);
+	    	printf("0x%08x:\t",hwdes+i*16);
 		for(j=1;j<=4;j++)
 		{
 			printf("0x");
@@ -112,7 +112,8 @@ static int cmd_x(char *args){
 		printf("\n");
 	}
 	int frac=bnum-cnt*4;
-	printf("%x:  ",hwdes+cnt*16);
+	if(frac)
+		printf("0x%08x:\t",hwdes+cnt*16);
 	for(i=1;i<=frac;i++)
 	{
 		printf("0x");

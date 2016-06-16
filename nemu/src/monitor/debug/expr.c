@@ -43,9 +43,9 @@ static struct rule {
 	{"&&", AND},
 	{"\\|\\|", OR},
 	{"\\!", '!'},
-	{"0x[0-9 a-f A-F]+",NUM},
+	{"0x[0-9a-fA-F]+",NUM},
 	{"[0-9]+",NUM},
-	{"\\$[e E](([a-d A-D][x X])|([b B s S][p P])|([s S d D][i I])|([i I][p P]))",REGISTER}
+	{"\\$[eE](([a-dA-D][xX])|([bBsS][pP])|([sSdD][iI])|([iI][pP]))",REGISTER}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -329,7 +329,7 @@ uint32_t expr(char *e, bool *success) {
 		}
 	}
 	int v=eval(tokens,tokens+nr_token-1);
-//	printf("ans:%d 0x%x\n",v,v);
+	printf("ans:%d 0x%x\n",v,v);
 	return v;
 	//panic("please implement me");
 //	return 0;
